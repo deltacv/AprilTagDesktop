@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'com.github.deltacv'
+version '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+sourceSets {
+    main {
+        resources {
+            // include native libs in the compiled jar
+            srcDirs "lib/"
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = "sources"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.openpnp:opencv:4.5.1-2"
+}
