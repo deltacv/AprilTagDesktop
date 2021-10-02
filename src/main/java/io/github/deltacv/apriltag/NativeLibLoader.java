@@ -69,7 +69,7 @@ public class NativeLibLoader {
                 extension = "dylib";
                 break;
             case UNKNOWN:
-                throw new UnsupportedOperationException(osName + " platform is not supported for the april tag desktop plugin!");
+                throw new UnsupportedOperationException("The " + osName + " platform couldn't be recognized, therefore the april tag desktop plugin is not supported");
         }
 
         String name =  "libapriltag." + extension;
@@ -80,7 +80,7 @@ public class NativeLibLoader {
         try {
             Files.copy(NativeLibLoader.class.getResourceAsStream("/" + name), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch(NullPointerException e) {
-            throw new UnsupportedOperationException("The AprilTag plugin is not supported in the " + osName + " platform", e);
+            throw new UnsupportedOperationException("A native lib could not be found for the " + osName + " platform, this probably means that the AprilTag plugin is not supported", e);
         } catch(Exception e) {
             throw new RuntimeException("Error while extracting native library", e);
         }
@@ -88,7 +88,7 @@ public class NativeLibLoader {
         try {
             System.load(tempFile.getAbsolutePath());
         } catch(Throwable e) {
-            throw new UnsupportedOperationException("The AprilTag plugin is not supported in the " + osName + " platform", e);
+            throw new UnsupportedOperationException("The native library failed to link, which probably means that the AprilTag plugin is not supported in the " + osName + " platform", e);
         }
     }
 
