@@ -1,6 +1,8 @@
 # AprilTagDesktop
 Port of EOCV-AprilTag-Plugin to the desktop EOCV-Sim
 
+<img src="https://github.com/deltacv/AprilTagDesktop/blob/main/doc/img_apriltag_eocvsim.png?raw=true" width="80%" height="80%"></img>
+
 # Supported platforms
 For now, the only supported platform consists of
 
