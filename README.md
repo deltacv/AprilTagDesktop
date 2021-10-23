@@ -4,8 +4,9 @@ Port of EOCV-AprilTag-Plugin to the desktop EOCV-Sim
 <img src="https://github.com/deltacv/AprilTagDesktop/blob/main/doc/img_apriltag_eocvsim.png?raw=true" width="80%" height="80%"></img>
 
 # Supported platforms
-For now, the only supported platform consists of
+For now, the only supported platforms consist of
 
+  - Windows x86_64 (tested in Windows 10)
   - Linux x86_64 (tested in Ubuntu 20.04)
   
 We are working to support the rest of the platforms in the future.
@@ -23,7 +24,7 @@ Some parts have been changed from the original sample to make it work in EOCV-Si
    }
    
    dependencies {
-      implementation 'com.github.deltacv:AprilTagDesktop:1.0.0' //add the dependency
+      implementation 'com.github.deltacv:AprilTagDesktop:1.1.0' //add the dependency
    }
    ```
    
@@ -44,9 +45,9 @@ Some parts have been changed from the original sample to make it work in EOCV-Si
     <dependency>
 	    <groupId>com.github.deltacv</groupId>
 	    <artifactId>AprilTagDesktop</artifactId>
-	    <version>1.0.0</version>
+	    <version>1.1.0</version>
 	</dependency>
    ```
 
 # Credits
-Almost all the source code in this repository was extracted from the [EOCV-AprilTag-Plugin](https://github.com/OpenFTC/EOCV-AprilTag-Plugin) repo, made by Windwoes (NPE) from the OpenFTC team. The Linux native library was also compiled by them. Many thanks to them for developing the plugin and providing us with the library!
+Almost all the source code in this repository was extracted from the [EOCV-AprilTag-Plugin](https://github.com/OpenFTC/EOCV-AprilTag-Plugin) repo, made by Windwoes (NPE) from the OpenFTC team. The Linux & Windows native libraries were also compiled by them. Many thanks for developing the plugin and providing us with the libraries!
