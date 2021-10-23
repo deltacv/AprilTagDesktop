@@ -52,8 +52,14 @@ public class NativeLibLoader {
 
         return OperatingSystem.UNKNOWN;
     }
+	
+	private static boolean hasBeenLoaded = false;
 
     public static void load() {
+		if(hasBeenLoaded) {
+			return;
+		}
+		
         OperatingSystem OS = getOS();
         String osName = System.getProperty("os.name").toLowerCase();
         String extension = "";
@@ -90,6 +96,8 @@ public class NativeLibLoader {
         } catch(Throwable e) {
             throw new UnsupportedOperationException("The native library failed to link, which probably means that the AprilTag plugin is not supported in the " + osName + " platform", e);
         }
+		
+		hasBeenLoaded = true;
     }
 
 }

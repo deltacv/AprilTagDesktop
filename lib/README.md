@@ -1,0 +1,2 @@
+Directory where the compiled native libraries for the april tag plugin are stored. They will be automatically packaged into the final jar file.
+REQUIREMENT: all libs placed here must be named "libapriltag", followed by their platform-specific extension (.so, .dll, .dylib, etc)
