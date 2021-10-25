@@ -85,7 +85,8 @@ if (WIN32)
     set(SHARED_LIB_EXTENSION "dll.a") # .dll.a is (I think?) equivalent to .lib, which is a "helper" thing required for linking to a dll on windows because reasons...
     set(IMPORT_TYPE "IMPORTED_IMPLIB")
     set(WIN32_OPENCV_VERSION "452")
-	set(JNI_PLATFORM_INCL "win32")
+    set(JNI_PLATFORM_INCL "win32")
+    set(CMAKE_SHARED_LINKER_FLAGS  "-static-libgcc -static-libstdc++ -static") # Statically link mingw32 libs so the user doesn't need to have them installed
 
 elseif (APPLE)
     set(SHARED_LIB_EXTENSION "dylib")
