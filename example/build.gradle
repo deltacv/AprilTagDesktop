@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group 'com.github.deltacv'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation rootProject
+    implementation "org.openpnp:opencv:4.5.1-2"
+}

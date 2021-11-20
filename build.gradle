@@ -39,5 +39,5 @@ repositories {
 }
 
 dependencies {
-    implementation "org.openpnp:opencv:4.5.1-2"
+    compileOnly "org.openpnp:opencv:4.5.1-2"
 }
