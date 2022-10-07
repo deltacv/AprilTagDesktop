@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_CXX_STANDARD 20)
 
-project("AprilTagDesktop")
+project("libapriltag")
 
 message(STATUS $ENV{JAVA_HOME})
 
@@ -36,7 +36,7 @@ endif()
 
 
 add_library( # Specifies the name of the library.
-             apriltag
+             libapriltag
 
              # Sets the library as a shared library.
              SHARED
