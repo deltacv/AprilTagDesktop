@@ -43,6 +43,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         
   build-linux:
+    needs: build-windows
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
@@ -64,10 +65,9 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
     
-   
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "${{github.workspace}}/${{env.BUILD_TYPE}}/*.so"
+        artifacts: "${{github.workspace}}/*.so"
         tag: "Dev"
         draft: true
         token: ${{ secrets.GITHUB_TOKEN }}
