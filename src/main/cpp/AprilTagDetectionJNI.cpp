@@ -296,7 +296,7 @@ Java_org_openftc_apriltag_ApriltagDetectionJNI_getDetectionPointers(JNIEnv *env,
         return NULL;
     }
 
-    vector<jlong> detectionPointers(numDetections);
+    std::vector<jlong> detectionPointers(numDetections);
 
     for(int i = 0; i < numDetections; i++)
     {
