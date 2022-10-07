@@ -32,3 +32,13 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      
+    
+    - uses: pyTooling/Actions/releaser@r0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: 'Dev'
+        rm: true
+        files: |
+          ${{github.workspace}}/${{env.BUILD_TYPE}}/*
+      if: ${{ github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/v')}}
