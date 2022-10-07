@@ -32,8 +32,8 @@ either expressed or implied, of the Regents of The University of Michigan.
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "common/string_util.h"
-#include "common/zarray.h"
+#include "string_util.h"
+#include "zarray.h"
 
 struct string_buffer
 {

@@ -15,9 +15,8 @@ set(JAVA_JVM_LIBRARY NotNeeded)
 set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 
 find_package(JNI REQUIRED)
-find_package(Threads)
 
-option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
+# option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 
 set (CMAKE_CXX_STANDARD 11)
 
@@ -26,6 +25,14 @@ set (CMAKE_CXX_STANDARD 11)
 # define multiple libraries by adding multiple add_library() commands,
 # and CMake builds them for you. When you build your app, Gradle
 # automatically packages shared libraries with your APK.
+
+if (MSVC)
+    add_compile_definitions("_CRT_SECURE_NO_WARNINGS")
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads m)
+endif()
+
 
 add_library( # Specifies the name of the library.
              apriltag
@@ -48,6 +55,7 @@ add_library( # Specifies the name of the library.
              src/main/cpp/apriltag_common/src/pjpeg-idct.c
              src/main/cpp/apriltag_common/src/pnm.c
              src/main/cpp/apriltag_common/src/string_util.c
+             src/main/cpp/apriltag_common/src/pthreads_cross.c
              src/main/cpp/apriltag_common/src/svd22.c
              src/main/cpp/apriltag_common/src/time_util.c
              src/main/cpp/apriltag_common/src/unionfind.c
@@ -64,9 +72,6 @@ add_library( # Specifies the name of the library.
              src/main/cpp/apriltag/src/tagCircle21h7.c
              src/main/cpp/apriltag/src/tagStandard41h12.c)
 			 
-# The shared library extension we need is platform specific
-#set(CMAKE_SHARED_LINKER_FLAGS  "-static-libgcc -static-libstdc++ -static") # Statically link mingw32 libs so the user doesn't need to have them installed
-
 # Specifies a path to native header files.
 include_directories(
                      src/main/cpp/apriltag/include
