@@ -38,4 +38,4 @@ jobs:
       with:
         artifacts: "${{github.workspace}}/${{env.BUILD_TYPE}}/*.dll"
         tag: "Dev"
-        token: ${{ secrets.YOUR_GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
