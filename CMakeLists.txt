@@ -55,7 +55,7 @@ add_library( # Specifies the name of the library.
              src/main/cpp/apriltag_common/src/pjpeg-idct.c
              src/main/cpp/apriltag_common/src/pnm.c
              src/main/cpp/apriltag_common/src/string_util.c
-             src/main/cpp/apriltag_common/src/pthreads_cross.c
+             src/main/cpp/apriltag_common/src/pthreads_cross.cpp
              src/main/cpp/apriltag_common/src/svd22.c
              src/main/cpp/apriltag_common/src/time_util.c
              src/main/cpp/apriltag_common/src/unionfind.c
