@@ -15,6 +15,9 @@ set(JAVA_JVM_LIBRARY NotNeeded)
 set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 
 find_package(JNI REQUIRED)
+find_package(Threads)
+
+option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 
 set (CMAKE_CXX_STANDARD 11)
 
