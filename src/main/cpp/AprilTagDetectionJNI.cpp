@@ -19,6 +19,8 @@
  * SOFTWARE.
  */
 
+#define _USE_MATH_DEFINES
+
 #include <jni.h>
 #include <apriltag.h>
 #include <tag36h11.h>
