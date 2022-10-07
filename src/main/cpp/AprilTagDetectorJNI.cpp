@@ -26,8 +26,6 @@
 #include <tag16h5.h>
 #include <tagStandard41h12.h>
 #include <common/getopt.h>
-#include "opencv2/imgproc.hpp"
-#include <opencv2/core.hpp>
 
 const char* LOG_TAG = "AprilTagDetectorJNI";
 
@@ -39,34 +37,54 @@ struct ApriltagDetectorJniContext
 };
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_org_openftc_apriltag_AprilTagDetectorJNI_runApriltagDetector(JNIEnv *env, jclass clazz, jlong jPtrContext, jlong jPtrGreyscaleMat)
+Java_org_openftc_apriltag_AprilTagDetectorJNI_runApriltagDetector(JNIEnv *env, jclass clazz, jlong jPtrContext, jlong ptrGreyscaleBuf, jint width, jint height)
 {
-    cv::Mat* grey  = (cv::Mat*) jPtrGreyscaleMat;
     ApriltagDetectorJniContext* context = (ApriltagDetectorJniContext*) jPtrContext;
 
-    // Make an image_u8_t header for the Mat data
-    image_u8_t im = {
-            .width = grey->cols,
-            .height = grey->rows,
-            .stride = grey->cols,
-            .buf = grey->data
-    };
-
-    zarray_t* detections = apriltag_detector_detect(context->td, &im);
-    int numDetections = zarray_size(detections);
-
-    if(numDetections == 0)
+    if(context == NULL || ptrGreyscaleBuf == NULL)
     {
+        env->ThrowNew(
+                env->FindClass("java/lang/IllegalArgumentException"),
+                "Pointer must not be null!");
         return 0;
     }
 
-    return (jlong ) detections;
+    // Make an image_u8_t header for the Mat data
+    image_u8_t im = {
+            .width = width,
+            .height = height,
+            .stride = width,
+            .buf = (uint8_t*) ptrGreyscaleBuf
+    };
+
+    zarray_t* detections = apriltag_detector_detect(context->td, &im);
+
+    // If the array is empty, we're not going to return a pointer to it to
+    // user code, so go ahead and release it now (otherwise it's a memory leak)
+    if(zarray_size(detections) == 0)
+    {
+        zarray_destroy(detections);
+        return 0;
+    }
+    else
+    {
+        return (jlong ) detections;
+    }
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_org_openftc_apriltag_AprilTagDetectorJNI_setApriltagDetectorDecimation(JNIEnv *env, jclass clazz, jlong jPtrContext, jfloat decimate)
 {
     ApriltagDetectorJniContext* context = (ApriltagDetectorJniContext*) jPtrContext;
+
+    if(context == NULL)
+    {
+        env->ThrowNew(
+                env->FindClass("java/lang/IllegalArgumentException"),
+                "Pointer must not be null!");
+        return;
+    }
+
     context->td->quad_decimate = decimate;
 }
 
@@ -106,7 +124,7 @@ Java_org_openftc_apriltag_AprilTagDetectorJNI_createApriltagDetector(JNIEnv *env
         return 0;
     }
 
-   // __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "Initializing april tag detector");
+    //__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "Initializing april tag detector");
     apriltag_detector_t* td = apriltag_detector_create();
     td->nthreads = threads;
     td->quad_decimate = decimate;
@@ -120,7 +138,7 @@ Java_org_openftc_apriltag_AprilTagDetectorJNI_createApriltagDetector(JNIEnv *env
     ApriltagDetectorJniContext* ptrContext = new ApriltagDetectorJniContext();
     ptrContext->tf = tf;
     ptrContext->td = td;
-    char *strForContext = new char[strlen(famname)];
+    char *strForContext = new char[strlen(famname)+1];
     strcpy(strForContext, famname);
     ptrContext->tagType = strForContext;
 

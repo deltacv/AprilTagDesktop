@@ -12,3 +12,8 @@ dependencies {
     implementation rootProject
     implementation "org.openpnp:opencv:4.5.1-2"
 }
+
+task(runExample, dependsOn: 'classes', type: JavaExec) {
+    main = 'io.github.deltacv.apriltag.example.AprilTagExample'
+    classpath = sourceSets.main.runtimeClasspath
+}
