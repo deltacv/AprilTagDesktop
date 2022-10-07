@@ -307,7 +307,7 @@ Java_org_openftc_apriltag_ApriltagDetectionJNI_getDetectionPointers(JNIEnv *env,
     }
 
     jlongArray result = env->NewLongArray(numDetections);
-    env->SetLongArrayRegion(result, 0, numDetections, detectionPointers.data();
+    env->SetLongArrayRegion(result, 0, numDetections, detectionPointers.data());
 
     return result;
 }
