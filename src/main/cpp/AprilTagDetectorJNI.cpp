@@ -51,10 +51,7 @@ Java_org_openftc_apriltag_AprilTagDetectorJNI_runApriltagDetector(JNIEnv *env, j
 
     // Make an image_u8_t header for the Mat data
     image_u8_t im = {
-            .width = width,
-            .height = height,
-            .stride = width,
-            .buf = (uint8_t*) ptrGreyscaleBuf
+            width, height, width, (uint8_t*) ptrGreyscaleBuf
     };
 
     zarray_t* detections = apriltag_detector_detect(context->td, &im);
