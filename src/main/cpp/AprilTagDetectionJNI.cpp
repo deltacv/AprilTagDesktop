@@ -30,6 +30,7 @@
 #include <iostream>
 #include <math.h>
 #include <limits>
+#include <vector>
 
 bool closeEnough(const float& a, const float& b, const float& epsilon = std::numeric_limits<float>::epsilon());
 void rotationMatrixToEulerAngles_rad(matd_t* R, double *out);
@@ -295,13 +296,14 @@ Java_org_openftc_apriltag_ApriltagDetectionJNI_getDetectionPointers(JNIEnv *env,
         return NULL;
     }
 
-    jlong detectionPointers[numDetections];
+    vector<jlong> detectionPointers(numDetections);
 
     for(int i = 0; i < numDetections; i++)
     {
         apriltag_detection_t* det;
         zarray_get(detections, i, &det);
         detectionPointers[i] = (jlong) det;
+		
     }
 
     jlongArray result = env->NewLongArray(numDetections);
