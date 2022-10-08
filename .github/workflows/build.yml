@@ -40,7 +40,7 @@ jobs:
         prerelease: true
         title: "Last Windows Native"
         files: |
-          *.dll
+          ${{github.workspace}}/${{env.BUILD_TYPE}}/*.dll
         
   build-linux:
     needs: build-windows
@@ -72,7 +72,7 @@ jobs:
         prerelease: true
         title: "Last Linux Native"
         files: |
-          *.so
+          ${{github.workspace}}/*.so
           
     
   build-mac:
@@ -105,4 +105,4 @@ jobs:
         prerelease: true
         title: "Last Mac Native"
         files: |
-          *.dylib
+          ${{github.workspace}}/*.dylib
