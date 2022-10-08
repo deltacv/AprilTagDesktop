@@ -33,20 +33,14 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
     
-   
-    #- uses: ncipollo/release-action@v1
-    #  with:
-    #    artifacts: "${{github.workspace}}/${{env.BUILD_TYPE}}/*.dll"
-    #    removeArtifacts: true
-    #    tag: "Dev"
-    #    draft: true
-    #    token: ${{ secrets.GITHUB_TOKEN }}
-        
-    - uses: pyTooling/Actions/releaser@r0
+    - uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest-windows"
+        prerelease: true
+        title: "Last Windows Native"
         files: |
-          "${{github.workspace}}/${{env.BUILD_TYPE}}/*.dll"
+          *.dll
         
   build-linux:
     needs: build-windows
@@ -71,11 +65,14 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
-    - uses: pyTooling/Actions/releaser@r0
+    - uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest-linux"
+        prerelease: true
+        title: "Last Linux Native"
         files: |
-          "${{github.workspace}}/*.so
+          *.so
           
     
   build-mac:
@@ -100,9 +97,12 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
-
-    - uses: pyTooling/Actions/releaser@r0
+      
+    - uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest-mac"
+        prerelease: true
+        title: "Last Mac Native"
         files: |
-          "${{github.workspace}}/*.dylib
+          *.dylib
