@@ -40,7 +40,7 @@ jobs:
         prerelease: true
         title: "Last Windows Native"
         files: |
-          ${{github.workspace}}/${{env.BUILD_TYPE}}/*.dll
+          ${{github.workspace}}\${{env.BUILD_TYPE}}\*.dll
         
   build-linux:
     needs: build-windows
