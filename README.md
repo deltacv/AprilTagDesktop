@@ -4,13 +4,11 @@ Port of EOCV-AprilTag-Plugin to the desktop EOCV-Sim
 <img src="https://github.com/deltacv/AprilTagDesktop/blob/main/doc/img_apriltag_eocvsim.png?raw=true" width="80%" height="80%"></img>
 
 # Supported platforms
-For now, the only supported platforms consist of
 
   - Windows x86_64 (tested in Windows 10)
+  - MacOS x86_64 (not tested)
   - Linux x86_64 (tested in Ubuntu 20.04)
   
-We are working to support the rest of the platforms in the future.
-
 # Usage
 See the [example pipeline](https://github.com/deltacv/EOCV-Sim/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/AprilTagDetectionPipeline.java) in the EOCV-Sim repo to learn how to use the library.
 Some parts have been changed from the original sample to make it work in EOCV-Sim. Make sure to check the [samples folder in the original repo](https://github.com/OpenFTC/EOCV-AprilTag-Plugin/tree/master/examples/src/main/java/org/firstinspires/ftc/teamcode) to learn how to use it within the FTC SDK!
