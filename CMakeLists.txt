@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_CXX_STANDARD 20)
 
-project("AprilTagDesktop")
+project("apriltag")
 
 message(STATUS $ENV{JAVA_HOME})
 
@@ -20,20 +20,6 @@ find_package(JNI REQUIRED)
 # option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 
 set (CMAKE_CXX_STANDARD 11)
-
-# Specifies a library name, specifies whether the library is STATIC or
-# SHARED, and provides relative paths to the source code. You can
-# define multiple libraries by adding multiple add_library() commands,
-# and CMake builds them for you. When you build your app, Gradle
-# automatically packages shared libraries with your APK.
-
-if (MSVC)
-    add_compile_definitions("_CRT_SECURE_NO_WARNINGS")
-else()
-    find_package(Threads REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads m)
-endif()
-
 
 add_library( # Specifies the name of the library.
              apriltag
