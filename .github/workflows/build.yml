@@ -36,7 +36,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: native-windows
-        path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*
+        path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*.dll
         
   build-linux:
     needs: build-windows
@@ -64,7 +64,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: native-linux
-        path: ${{github.workspace}}/*
+        path: ${{github.workspace}}/*.so
     
   build-mac:
     needs: build-linux
