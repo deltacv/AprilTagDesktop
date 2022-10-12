@@ -32,15 +32,11 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
-    
-    - uses: "marvinpinto/action-automatic-releases@latest"
+
+    - uses: actions/upload-artifact@v3
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest-windows"
-        prerelease: true
-        title: "Last Windows Native"
-        files: |
-          ${{github.workspace}}\${{env.BUILD_TYPE}}\apriltag.dll
+        name: native-windows
+        path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*
         
   build-linux:
     needs: build-windows
@@ -65,15 +61,10 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    - uses: actions/upload-artifact@v3
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest-linux"
-        prerelease: true
-        title: "Last Linux Native"
-        files: |
-          ${{github.workspace}}/*.so
-          
+        name: native-linux
+        path: ${{github.workspace}}/*
     
   build-mac:
     needs: build-linux
@@ -98,11 +89,25 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
       
+    - uses: actions/download-artifact@v3
+      with:
+        name: native-windows
+        path: ${{github.workspace}}
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: native-linux
+        path: ${{github.workspace}
+        
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest-mac"
+        automatic_release_tag: "natives"
         prerelease: true
-        title: "Last Mac Native"
+        title: "Natives"
         files: |
+          ${{github.workspace}}/*.dll
+          ${{github.workspace}}/*.so
           ${{github.workspace}}/*.dylib
+        
+    
