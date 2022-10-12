@@ -38,7 +38,7 @@ public class AprilTagExample {
         VideoCapture camera = new VideoCapture();
 
         System.out.print("Enter a camera index: ");
-        int index = new Scanner(System.in).nextInt();
+        int index = 0;//new Scanner(System.in).nextInt();
 
         camera.open(index);
         if(!camera.isOpened()) {
