@@ -97,7 +97,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: native-linux
-        path: ${{github.workspace}
+        path: ${{github.workspace}}
         
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -109,5 +109,3 @@ jobs:
           ${{github.workspace}}/*.dll
           ${{github.workspace}}/*.so
           ${{github.workspace}}/*.dylib
-        
-    
