@@ -35,19 +35,25 @@ public class NativeLibLoader {
     public enum OperatingSystem {
         WINDOWS,
         LINUX,
-        MACOS,
+        MACOS_X86,
+	MACOS_SILICON,
         UNKNOWN
     }
 
     public static OperatingSystem getOS() {
         String osName = System.getProperty("os.name").toLowerCase();
+	String arch = System.getProperty("os.arch");
 
         if (osName.contains("win")) {
             return OperatingSystem.WINDOWS;
         } else if (osName.contains("nux")) {
             return OperatingSystem.LINUX;
         } else if (osName.contains("mac") || osName.contains("darwin")) {
-            return OperatingSystem.MACOS;
+	    if(arch.equals("aarch64") || arch.contains("arch") || arch.contains("arm")) {
+                return OperatingSystem.MACOS_SILICON;
+	    } else {
+                return OperatingSystem.MACOS_X86;
+	    }
         }
 
         return OperatingSystem.UNKNOWN;
@@ -66,19 +72,22 @@ public class NativeLibLoader {
 
         switch(OS) {
             case WINDOWS:
-                extension = "dll";
+                extension = ".dll";
                 break;
             case LINUX:
-                extension = "so";
+                extension = ".so";
                 break;
-            case MACOS:
-                extension = "dylib";
+            case MACOS_X86:
+                extension = ".dylib";
+                break;
+            case MACOS_SILICON:
+                extension = "_arm.dylib";
                 break;
             case UNKNOWN:
                 throw new UnsupportedOperationException("The " + osName + " platform couldn't be recognized, therefore the april tag desktop plugin is not supported");
         }
 
-        String name =  "libapriltag." + extension;
+        String name =  "libapriltag" + extension;
 
         String tmpDir = System.getProperty("java.io.tmpdir");
         File tempFile = new File(tmpDir + File.separator + name);
@@ -97,7 +106,7 @@ public class NativeLibLoader {
             throw new UnsupportedOperationException("The native library failed to link, which probably means that the AprilTag plugin is not supported in the " + osName + " platform", e);
         }
 		
-		hasBeenLoaded = true;
+        hasBeenLoaded = true;
     }
 
 }
