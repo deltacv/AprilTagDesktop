@@ -40,5 +40,5 @@ repositories {
 
 dependencies {
     compileOnly "org.openpnp:opencv:4.5.1-2"
-    implementation project(':RobotCore')
+    api project(':RobotCore')
 }
