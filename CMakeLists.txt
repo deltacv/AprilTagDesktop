@@ -19,8 +19,6 @@ find_package(JNI REQUIRED)
 
 # option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 
-set (CMAKE_CXX_STANDARD 11)
-
 add_library( # Specifies the name of the library.
              apriltag
 
