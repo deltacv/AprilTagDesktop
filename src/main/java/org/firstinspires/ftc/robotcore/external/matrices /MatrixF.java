@@ -32,8 +32,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.robotcore.external.matrices;
 
-import android.annotation.SuppressLint;
-
 import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.NonConst;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -669,8 +667,7 @@ public abstract class MatrixF
         {
         return dimensionsError(this.numRows, this.numCols);
         }
-
-    @SuppressLint("DefaultLocale")
+        
     protected static RuntimeException dimensionsError(int numRows, int numCols)
         {
         return new IllegalArgumentException(String.format("matrix dimensions are incorrect: rows=%d cols=%d", numRows, numCols));
