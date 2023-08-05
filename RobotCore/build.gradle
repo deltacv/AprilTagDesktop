@@ -29,5 +29,5 @@ repositories {
 }
 
 dependencies {
-
+    api fileTree(include: ['*.jar'], dir: 'libs')
 }
