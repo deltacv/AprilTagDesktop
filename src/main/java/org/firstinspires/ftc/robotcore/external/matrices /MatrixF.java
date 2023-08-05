@@ -667,7 +667,7 @@ public abstract class MatrixF
         {
         return dimensionsError(this.numRows, this.numCols);
         }
-        
+
     protected static RuntimeException dimensionsError(int numRows, int numCols)
         {
         return new IllegalArgumentException(String.format("matrix dimensions are incorrect: rows=%d cols=%d", numRows, numCols));
@@ -799,3 +799,35 @@ public abstract class MatrixF
         }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
