@@ -33,7 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.robotcore.external.navigation;
 
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+// import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.internal.system.Assert;
 
@@ -248,7 +248,7 @@ public class Orientation
      */
     public OpenGLMatrix getRotationMatrix()
         {
-        return getRotationMatrix(this.axesReference, this.axesOrder, this.angleUnit, this.firstAngle, this.secondAngle, this.thirdAngle);
+        throw RuntimeException("Stub!");
         }
 
     /**
@@ -260,186 +260,7 @@ public class Orientation
      */
     public static OpenGLMatrix getRotationMatrix(AxesReference axesReference, AxesOrder axesOrder, AngleUnit unit, float firstAngle, float secondAngle, float thirdAngle)
         {
-        if (axesReference == AxesReference.INTRINSIC)
-            {
-            /**
-             * Theorem: Any extrinsic rotation is equivalent to an intrinsic rotation by the same
-             * angles but with inverted order of elemental orientations, and vice versa.
-             * @see <a href="https://en.wikipedia.org/wiki/Euler_angles">Euler Angles</a>
-             */
-            return getRotationMatrix(axesReference.reverse(), axesOrder.reverse(), unit, thirdAngle, secondAngle, firstAngle);
-            }
-
-        /**
-         * The extrinsic case takes some work.
-         *
-         * Implementation note: these computations were created automatically from symbolic Mathematica expressions.
-         * Each computes the intrinsic rotation matrix of a given {@link AxesOrder}, where the axes in the {@link AxesOrder}
-         * are used left to right chronologically and the angles are applied chronologically as well.
-         *
-         * For example, the entry for YXZ is rotation matrix of the extrinsic rotation which rotates first
-         * Y(firstAngle), then X(secondAngle), and finally Z(thirdAngle). The rotation matrix in this case is
-         *      Z(thirdAngle).X(secondAngle).Y(firstAngle)
-         * as the matrix order (when *post*-multiplying vectors, as is always done in modern computer graphics systems),
-         * which you will notice has the matrices in reverse order from the chronological sequence of extrinsic rotations.
-         */
-
-        firstAngle = unit.toRadians(firstAngle);
-        secondAngle = unit.toRadians(secondAngle);
-        thirdAngle = unit.toRadians(thirdAngle);
-
-        float m00, m01, m02;
-        float m10, m11, m12;
-        float m20, m21, m22;
-
-        switch (axesOrder)
-            {
-            default:
-            case XZX:
-                m00 = ((float) (cos(secondAngle)));
-                m01 = ((float) (-(cos(firstAngle) * sin(secondAngle))));
-                m02 = ((float) (sin(firstAngle) * sin(secondAngle)));
-                m10 = ((float) (cos(thirdAngle) * sin(secondAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(secondAngle) * cos(thirdAngle) - sin(firstAngle) * sin(thirdAngle)));
-                m12 = ((float) (-(cos(firstAngle) * sin(thirdAngle)) - cos(secondAngle) * cos(thirdAngle) * sin(firstAngle)));
-                m20 = ((float) (sin(secondAngle) * sin(thirdAngle)));
-                m21 = ((float) (cos(thirdAngle) * sin(firstAngle) + cos(firstAngle) * cos(secondAngle) * sin(thirdAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(thirdAngle) - cos(secondAngle) * sin(firstAngle) * sin(thirdAngle)));
-                break;
-            case XYX:
-                m00 = ((float) (cos(secondAngle)));
-                m01 = ((float) (sin(firstAngle) * sin(secondAngle)));
-                m02 = ((float) (cos(firstAngle) * sin(secondAngle)));
-                m10 = ((float) (sin(secondAngle) * sin(thirdAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(thirdAngle) - cos(secondAngle) * sin(firstAngle) * sin(thirdAngle)));
-                m12 = ((float) (-(cos(firstAngle) * cos(secondAngle) * sin(thirdAngle)) - cos(thirdAngle) * sin(firstAngle)));
-                m20 = ((float) (-(cos(thirdAngle) * sin(secondAngle))));
-                m21 = ((float) (cos(firstAngle) * sin(thirdAngle) + cos(secondAngle) * cos(thirdAngle) * sin(firstAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(secondAngle) * cos(thirdAngle) - sin(firstAngle) * sin(thirdAngle)));
-                break;
-            case YXY:
-                m00 = ((float) (cos(firstAngle) * cos(thirdAngle) - cos(secondAngle) * sin(firstAngle) * sin(thirdAngle)));
-                m01 = ((float) (sin(secondAngle) * sin(thirdAngle)));
-                m02 = ((float) (cos(thirdAngle) * sin(firstAngle) + cos(firstAngle) * cos(secondAngle) * sin(thirdAngle)));
-                m10 = ((float) (sin(firstAngle) * sin(secondAngle)));
-                m11 = ((float) (cos(secondAngle)));
-                m12 = ((float) (-(cos(firstAngle) * sin(secondAngle))));
-                m20 = ((float) (-(cos(firstAngle) * sin(thirdAngle)) - cos(secondAngle) * cos(thirdAngle) * sin(firstAngle)));
-                m21 = ((float) (cos(thirdAngle) * sin(secondAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(secondAngle) * cos(thirdAngle) - sin(firstAngle) * sin(thirdAngle)));
-                break;
-            case YZY:
-                m00 = ((float) (cos(firstAngle) * cos(secondAngle) * cos(thirdAngle) - sin(firstAngle) * sin(thirdAngle)));
-                m01 = ((float) (-(cos(thirdAngle) * sin(secondAngle))));
-                m02 = ((float) (cos(firstAngle) * sin(thirdAngle) + cos(secondAngle) * cos(thirdAngle) * sin(firstAngle)));
-                m10 = ((float) (cos(firstAngle) * sin(secondAngle)));
-                m11 = ((float) (cos(secondAngle)));
-                m12 = ((float) (sin(firstAngle) * sin(secondAngle)));
-                m20 = ((float) (-(cos(firstAngle) * cos(secondAngle) * sin(thirdAngle)) - cos(thirdAngle) * sin(firstAngle)));
-                m21 = ((float) (sin(secondAngle) * sin(thirdAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(thirdAngle) - cos(secondAngle) * sin(firstAngle) * sin(thirdAngle)));
-                break;
-            case ZYZ:
-                m00 = ((float) (cos(firstAngle) * cos(secondAngle) * cos(thirdAngle) - sin(firstAngle) * sin(thirdAngle)));
-                m01 = ((float) (-(cos(firstAngle) * sin(thirdAngle)) - cos(secondAngle) * cos(thirdAngle) * sin(firstAngle)));
-                m02 = ((float) (cos(thirdAngle) * sin(secondAngle)));
-                m10 = ((float) (cos(thirdAngle) * sin(firstAngle) + cos(firstAngle) * cos(secondAngle) * sin(thirdAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(thirdAngle) - cos(secondAngle) * sin(firstAngle) * sin(thirdAngle)));
-                m12 = ((float) (sin(secondAngle) * sin(thirdAngle)));
-                m20 = ((float) (-(cos(firstAngle) * sin(secondAngle))));
-                m21 = ((float) (sin(firstAngle) * sin(secondAngle)));
-                m22 = ((float) (cos(secondAngle)));
-                break;
-            case ZXZ:
-                m00 = ((float) (cos(firstAngle) * cos(thirdAngle) - cos(secondAngle) * sin(firstAngle) * sin(thirdAngle)));
-                m01 = ((float) (-(cos(firstAngle) * cos(secondAngle) * sin(thirdAngle)) - cos(thirdAngle) * sin(firstAngle)));
-                m02 = ((float) (sin(secondAngle) * sin(thirdAngle)));
-                m10 = ((float) (cos(firstAngle) * sin(thirdAngle) + cos(secondAngle) * cos(thirdAngle) * sin(firstAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(secondAngle) * cos(thirdAngle) - sin(firstAngle) * sin(thirdAngle)));
-                m12 = ((float) (-(cos(thirdAngle) * sin(secondAngle))));
-                m20 = ((float) (sin(firstAngle) * sin(secondAngle)));
-                m21 = ((float) (cos(firstAngle) * sin(secondAngle)));
-                m22 = ((float) (cos(secondAngle)));
-                break;
-            case XZY:
-                m00 = ((float) (cos(secondAngle) * cos(thirdAngle)));
-                m01 = ((float) (sin(firstAngle) * sin(thirdAngle) - cos(firstAngle) * cos(thirdAngle) * sin(secondAngle)));
-                m02 = ((float) (cos(firstAngle) * sin(thirdAngle) + cos(thirdAngle) * sin(firstAngle) * sin(secondAngle)));
-                m10 = ((float) (sin(secondAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(secondAngle)));
-                m12 = ((float) (-(cos(secondAngle) * sin(firstAngle))));
-                m20 = ((float) (-(cos(secondAngle) * sin(thirdAngle))));
-                m21 = ((float) (cos(thirdAngle) * sin(firstAngle) + cos(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(thirdAngle) - sin(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                break;
-            case XYZ:
-                m00 = ((float) (cos(secondAngle) * cos(thirdAngle)));
-                m01 = ((float) (cos(thirdAngle) * sin(firstAngle) * sin(secondAngle) - cos(firstAngle) * sin(thirdAngle)));
-                m02 = ((float) (sin(firstAngle) * sin(thirdAngle) + cos(firstAngle) * cos(thirdAngle) * sin(secondAngle)));
-                m10 = ((float) (cos(secondAngle) * sin(thirdAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(thirdAngle) + sin(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                m12 = ((float) (cos(firstAngle) * sin(secondAngle) * sin(thirdAngle) - cos(thirdAngle) * sin(firstAngle)));
-                m20 = ((float) (-sin(secondAngle)));
-                m21 = ((float) (cos(secondAngle) * sin(firstAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(secondAngle)));
-                break;
-            case YXZ:
-                m00 = ((float) (cos(firstAngle) * cos(thirdAngle) - sin(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                m01 = ((float) (-(cos(secondAngle) * sin(thirdAngle))));
-                m02 = ((float) (cos(thirdAngle) * sin(firstAngle) + cos(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                m10 = ((float) (cos(firstAngle) * sin(thirdAngle) + cos(thirdAngle) * sin(firstAngle) * sin(secondAngle)));
-                m11 = ((float) (cos(secondAngle) * cos(thirdAngle)));
-                m12 = ((float) (sin(firstAngle) * sin(thirdAngle) - cos(firstAngle) * cos(thirdAngle) * sin(secondAngle)));
-                m20 = ((float) (-(cos(secondAngle) * sin(firstAngle))));
-                m21 = ((float) (sin(secondAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(secondAngle)));
-                break;
-            case YZX:
-                m00 = ((float) (cos(firstAngle) * cos(secondAngle)));
-                m01 = ((float) (-sin(secondAngle)));
-                m02 = ((float) (cos(secondAngle) * sin(firstAngle)));
-                m10 = ((float) (sin(firstAngle) * sin(thirdAngle) + cos(firstAngle) * cos(thirdAngle) * sin(secondAngle)));
-                m11 = ((float) (cos(secondAngle) * cos(thirdAngle)));
-                m12 = ((float) (cos(thirdAngle) * sin(firstAngle) * sin(secondAngle) - cos(firstAngle) * sin(thirdAngle)));
-                m20 = ((float) (cos(firstAngle) * sin(secondAngle) * sin(thirdAngle) - cos(thirdAngle) * sin(firstAngle)));
-                m21 = ((float) (cos(secondAngle) * sin(thirdAngle)));
-                m22 = ((float) (cos(firstAngle) * cos(thirdAngle) + sin(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                break;
-            case ZYX:
-                m00 = ((float) (cos(firstAngle) * cos(secondAngle)));
-                m01 = ((float) (-(cos(secondAngle) * sin(firstAngle))));
-                m02 = ((float) (sin(secondAngle)));
-                m10 = ((float) (cos(thirdAngle) * sin(firstAngle) + cos(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(thirdAngle) - sin(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                m12 = ((float) (-(cos(secondAngle) * sin(thirdAngle))));
-                m20 = ((float) (sin(firstAngle) * sin(thirdAngle) - cos(firstAngle) * cos(thirdAngle) * sin(secondAngle)));
-                m21 = ((float) (cos(firstAngle) * sin(thirdAngle) + cos(thirdAngle) * sin(firstAngle) * sin(secondAngle)));
-                m22 = ((float) (cos(secondAngle) * cos(thirdAngle)));
-                break;
-            case ZXY:
-                m00 = ((float) (cos(firstAngle) * cos(thirdAngle) + sin(firstAngle) * sin(secondAngle) * sin(thirdAngle)));
-                m01 = ((float) (cos(firstAngle) * sin(secondAngle) * sin(thirdAngle) - cos(thirdAngle) * sin(firstAngle)));
-                m02 = ((float) (cos(secondAngle) * sin(thirdAngle)));
-                m10 = ((float) (cos(secondAngle) * sin(firstAngle)));
-                m11 = ((float) (cos(firstAngle) * cos(secondAngle)));
-                m12 = ((float) (-sin(secondAngle)));
-                m20 = ((float) (cos(thirdAngle) * sin(firstAngle) * sin(secondAngle) - cos(firstAngle) * sin(thirdAngle)));
-                m21 = ((float) (sin(firstAngle) * sin(thirdAngle) + cos(firstAngle) * cos(thirdAngle) * sin(secondAngle)));
-                m22 = ((float) (cos(secondAngle) * cos(thirdAngle)));
-                break;
-            }
-
-        OpenGLMatrix result = new OpenGLMatrix();
-        result.put(0, 0, m00);
-        result.put(0, 1, m01);
-        result.put(0, 2, m02);
-        result.put(1, 0, m10);
-        result.put(1, 1, m11);
-        result.put(1, 2, m12);
-        result.put(2, 0, m20);
-        result.put(2, 1, m21);
-        result.put(2, 2, m22);
-        return result;
+        throw RuntimeException("Stub!");
         }
 
     /**
