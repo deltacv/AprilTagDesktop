@@ -28,7 +28,7 @@
 #include <common/getopt.h>
 #include <apriltag_pose.h>
 #include <iostream>
-#include <android/log.h>
+// #include <android/log.h>
 
 extern "C" JNIEXPORT jint JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getId(JNIEnv *env, jclass clazz, jlong ptr)
