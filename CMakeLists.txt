@@ -59,13 +59,8 @@ add_library( # Specifies the name of the library.
              src/main/cpp/apriltag/tagStandard41h12.c
 )
 
-set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 
-# VROOOOOOOM
-target_compile_options(apriltag PRIVATE
-        "$<$<CONFIG:RELEASE>:-O3>"
-        "$<$<CONFIG:DEBUG>:-O3>"
-        )
+# set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 			 
 # Specifies a path to native header files.
 include_directories(
