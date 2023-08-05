@@ -2,13 +2,13 @@ name: CMake
 
 on:
   push:
-    branches-ignore: ['main']
+    branches: [ "main" ]
   pull_request:
-    branches-ignore: ['main']
+    branches: [ "main" ]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Debug
+  BUILD_TYPE: Release
 
 jobs:
   build-windows:
@@ -33,6 +33,11 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
+    - uses: actions/upload-artifact@v3
+      with:
+        name: native-windows
+        path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*.dll
+        
   build-linux:
     needs: build-windows
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
@@ -55,6 +60,11 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: native-linux
+        path: ${{github.workspace}}/*.so
     
   build-mac:
     needs: build-linux
@@ -78,3 +88,24 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      
+    - uses: actions/download-artifact@v3
+      with:
+        name: native-windows
+        path: ${{github.workspace}}
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: native-linux
+        path: ${{github.workspace}}
+        
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "natives"
+        prerelease: true
+        title: "Natives"
+        files: |
+          ${{github.workspace}}/*.dll
+          ${{github.workspace}}/*.so
+          ${{github.workspace}}/*.dylib
