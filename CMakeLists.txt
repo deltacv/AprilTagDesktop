@@ -4,13 +4,20 @@
 # This ensures that a certain set of CMake features is available to
 # your build.
 
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_C_COMPILER "gcc")
-set(CMAKE_CXX_COMPILER "g++")
+if(NOT DEFINED ARCH)
+    if(DEFINED CMAKE_OSX_ARCHITECTURES)
+	set(ARCH CMAKE_OSX_ARCHITECTURES)
+    else()
+    	set(ARCH CMAKE_SYSTEM_PROCESSOR)
+     endif()
+else()
+    string(APPEND "_" ARCH)
+endif()
 
-project("apriltag")
+project("apriltag$ARCH")
 
 message(STATUS $ENV{JAVA_HOME})
 
@@ -19,8 +26,6 @@ set(JAVA_JVM_LIBRARY NotNeeded)
 set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 
 find_package(JNI REQUIRED)
-
-# option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 
 add_library( # Specifies the name of the library.
              apriltag
@@ -69,7 +74,5 @@ add_library( # Specifies the name of the library.
 include_directories(
                      src/main/cpp/apriltag
                      src/main/cpp/apriltag/common
-                     #${CMAKE_JAVA_}
 		     ${JNI_INCLUDE_DIRS}
 )
-		
