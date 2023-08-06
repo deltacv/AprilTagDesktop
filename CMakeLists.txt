@@ -10,12 +10,14 @@ set(CMAKE_CXX_STANDARD 20)
 project("apriltag")
 
 if(NOT DEFINED ARCH)
-    if(DEFINED CMAKE_OSX_ARCHITECTURES)
+    if(DEFINED CMAKE_OSX_ARCHITECTURES AND NOT "${CMAKE_OSX_ARCHITECTURES}" STREQUAL ""))
 	set(ARCH ${CMAKE_OSX_ARCHITECTURES})
     else()
     	set(ARCH ${CMAKE_SYSTEM_PROCESSOR})
     endif()
 endif()
+
+string(TOLOWER ${ARCH} ARCH)
 
 message(STATUS "Target architecture: ${ARCH}")
 
