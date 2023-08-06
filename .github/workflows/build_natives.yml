@@ -81,25 +81,16 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: native-windows-amd64
-          path: ${{github.workspace}}/amd64
+          path: ${{github.workspace}}
       - uses: actions/download-artifact@v3
         with:
           name: native-linux-amd64
-          path: ${{github.workspace}}/amd64
+          path: ${{github.workspace}}
       - uses: actions/download-artifact@v3
         with:
           name: native-mac-amd64
-          path: ${{github.workspace}}/amd64
-      - name: Rename Apple Silicon native to append architecture
-        run: |
-          brew install rename
-          cd ${{github.workspace}}/
-          rename -a -aarch64 *
-      - name: Rename natives to append architecture
-        run: |
-          brew install rename
-          cd ${{github.workspace}}/amd64
-          rename -a amd64- *
+          path: ${{github.workspace}}
+          
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
