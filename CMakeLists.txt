@@ -7,16 +7,6 @@
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 20)
 
-if(NOT DEFINED ARCH)
-    if(DEFINED CMAKE_OSX_ARCHITECTURES)
-	set(ARCH CMAKE_OSX_ARCHITECTURES)
-    else()
-    	set(ARCH CMAKE_SYSTEM_PROCESSOR)
-    endif()
-endif()
-
-string(APPEND "_" ARCH)
-
 project("apriltag")
 
 message(STATUS $ENV{JAVA_HOME})
@@ -28,7 +18,7 @@ set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 find_package(JNI REQUIRED)
 
 add_library( # Specifies the name of the library.
-             apriltag$ARCH
+             apriltag
 
              # Sets the library as a shared library.
              SHARED
