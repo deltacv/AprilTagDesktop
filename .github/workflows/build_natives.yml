@@ -96,7 +96,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           automatic_release_tag: natives-${{github.ref}}
           prerelease: true
-          title: Natives from ${{github.ref#refs/heads/}}
+          title: Natives from ${{github.ref}}
           files: |
             ${{github.workspace}}/*.dll
             ${{github.workspace}}/*.so
