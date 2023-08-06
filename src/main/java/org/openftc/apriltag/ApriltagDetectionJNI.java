@@ -22,7 +22,7 @@
 package org.openftc.apriltag;
 
 import org.firstinspires.ftc.robotcore.external.matrices.GeneralMatrixF;
-import io.github.deltacv.apriltag.NativeLibLoader;
+import io.github.deltacv.apriltag.AprilTagLibLoader;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
@@ -145,6 +145,6 @@ public class ApriltagDetectionJNI
 
     static
     {
-        NativeLibLoader.load();
+        AprilTagLibLoader.load();
     }
 }

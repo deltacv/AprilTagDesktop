@@ -37,23 +37,23 @@ public class AprilTagExample {
 
         VideoCapture camera = new VideoCapture();
 
-        System.out.print("Enter a camera index: ");
-        int index = 0;//new Scanner(System.in).nextInt();
+        System.out.print("Enter camera index: ");
+        int index = new Scanner(System.in).nextInt();
 
         camera.open(index);
         if(!camera.isOpened()) {
-            System.out.println("Could not open camera " + index);
-            return;
+            System.err.println("\nCould not open camera " + index);
+            System.exit(1);
         }
 
         Mat image = new Mat();
         camera.read(image);
         if(image.empty()) {
-            System.out.println("Could not open camera " + index + " (image was empty)");
-            return;
+            System.err.println("\nCould not open camera " + index + " (image was empty)");
+            System.exit(1);
         }
 
-        System.out.println("Opened camera " + index);
+        System.out.println("\nOpened camera " + index);
 
         while(camera.isOpened()) {
             camera.read(image);
