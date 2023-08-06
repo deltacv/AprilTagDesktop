@@ -91,17 +91,15 @@ jobs:
           name: native-mac-amd64
           path: ${{github.workspace}}/amd64
       - name: Rename Apple Silicon native to append architecture
-        with:
-          run: |
-            brew install rename
-            cd ${{github.workspace}}/
-            rename -a -aarch64 *
+        run: |
+          brew install rename
+          cd ${{github.workspace}}/
+          rename -a -aarch64 *
       - name: Rename natives to append architecture
-        with:
-          run: |
-            brew install rename
-            cd ${{github.workspace}}/amd64
-            rename -a amd64- *
+        run: |
+          brew install rename
+          cd ${{github.workspace}}/amd64
+          rename -a amd64- *
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
