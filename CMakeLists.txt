@@ -12,7 +12,7 @@ if(NOT DEFINED ARCH)
     endif()
 endif()
 
-message(STATUS $ARCH)
+message(STATUS ${ARCH})
 
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 20)
@@ -67,7 +67,7 @@ add_library( # Specifies the name of the library.
              src/main/cpp/apriltag/tagStandard41h12.c
 )
 
-set_target_properties(apriltag PROPERTIES OUTPUT_NAME "libapriltag_$ARCH")
+set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
 
 # set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 			 
