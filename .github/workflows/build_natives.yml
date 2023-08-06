@@ -1,14 +1,10 @@
 name: CMake
 
-on:
-  push:
-    branches-ignore: ['main']
-  pull_request:
-    branches-ignore: ['main']
+on: push
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Debug
+  BUILD_TYPE: Release
 
 jobs:
   build-linux:
@@ -34,7 +30,12 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
-
+      
+    - uses: actions/upload-artifact@v3
+      with:
+        name: native-linux-amd64
+        path: ${{github.workspace}}/*.so
+    
   build-windows:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
@@ -58,6 +59,11 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      
+    - uses: actions/upload-artifact@v3
+      with:
+        name: native-windows-amd64
+        path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*.dll
     
   build-mac:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
@@ -82,8 +88,16 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: native-mac-amd64
+        path: ${{github.workspace}}/*.dylib
+    
       
   build-mac-cross-m1:
+    needs: [ build-linux, build-windows, build-mac ]
+    
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
@@ -106,3 +120,43 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: native-windows-amd64
+        path: ${{github.workspace}}/amd64
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: native-linux-amd64
+        path: ${{github.workspace}}/amd64
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: native-mac-amd64
+        path: ${{github.workspace}}/amd64
+
+    - name: Rename Apple Silicon native to append architecture
+      with:
+        run: |
+          brew install rename
+          cd ${{github.workspace}}/
+          rename -a -aarch64 *
+
+    - name: Rename natives to append architecture
+      with:
+        run: |
+          brew install rename
+          cd ${{github.workspace}}/amd64
+          rename -a amd64- *
+    
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "natives-${GITHUB_REF}"
+        prerelease: true
+        title: "Natives from ${GITHUB_REF#refs/heads/}"
+        files: |
+          ${{github.workspace}}/*.dll
+          ${{github.workspace}}/*.so
+          ${{github.workspace}}/*.dylib
