@@ -4,6 +4,11 @@
 # This ensures that a certain set of CMake features is available to
 # your build.
 
+cmake_minimum_required(VERSION 3.5)
+set(CMAKE_CXX_STANDARD 20)
+
+project("apriltag")
+
 if(NOT DEFINED ARCH)
     if(DEFINED CMAKE_OSX_ARCHITECTURES)
 	set(ARCH ${CMAKE_OSX_ARCHITECTURES})
@@ -12,12 +17,7 @@ if(NOT DEFINED ARCH)
     endif()
 endif()
 
-message(STATUS ${ARCH})
-
-cmake_minimum_required(VERSION 3.5)
-set(CMAKE_CXX_STANDARD 20)
-
-project("apriltag")
+message(STATUS "Target architecture: ${ARCH}")
 
 message(STATUS $ENV{JAVA_HOME})
 
