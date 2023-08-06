@@ -19,6 +19,11 @@ endif()
 
 string(TOLOWER ${ARCH} ARCH)
 
+
+if("${ARCH}" STREQUAL "x86_64")
+    set(ARCH "amd64")
+endif()
+
 message(STATUS "Target architecture: ${ARCH}")
 
 message(STATUS $ENV{JAVA_HOME})
