@@ -12,12 +12,12 @@ if(NOT DEFINED ARCH)
 	set(ARCH CMAKE_OSX_ARCHITECTURES)
     else()
     	set(ARCH CMAKE_SYSTEM_PROCESSOR)
-     endif()
-else()
-    string(APPEND "_" ARCH)
+    endif()
 endif()
 
-project("apriltag$ARCH")
+string(APPEND "_" ARCH)
+
+project("apriltag")
 
 message(STATUS $ENV{JAVA_HOME})
 
@@ -28,7 +28,7 @@ set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 find_package(JNI REQUIRED)
 
 add_library( # Specifies the name of the library.
-             apriltag
+             apriltag$ARCH
 
              # Sets the library as a shared library.
              SHARED
