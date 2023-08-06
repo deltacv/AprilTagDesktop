@@ -94,9 +94,9 @@ jobs:
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: natives-${GITHUB_REF}
+          automatic_release_tag: natives-${{github.ref}}
           prerelease: true
-          title: Natives from ${GITHUB_REF#refs/heads/}
+          title: Natives from ${{github.ref#refs/heads/}}
           files: |
             ${{github.workspace}}/*.dll
             ${{github.workspace}}/*.so
