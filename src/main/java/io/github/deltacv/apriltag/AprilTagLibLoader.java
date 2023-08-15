@@ -70,16 +70,25 @@ public class AprilTagLibLoader {
         String osArch = osName + " (" + arch + ")";
 
         String name = prefix + "apriltag" + extension;
+        String versionedName = Integer.toUnsignedString(Build.versionString.hashCode()) + name;
 
         String tmpDir = System.getProperty("java.io.tmpdir");
-        File tempFile = new File(tmpDir + File.separator + "deltacv_apriltag_" + Math.random() + File.separator + name);
 
-        try {
-            Files.copy(Objects.requireNonNull(AprilTagLibLoader.class.getResourceAsStream("/" + name)), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (NullPointerException e) {
-            throw new UnsupportedOperationException("Library could not be found for the " + osArch + " platform, AprilTag plugin is not supported. Tried " + name, e);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while extracting library", e);
+        File tempDeltacv = new File(tmpDir + File.separator + "deltacv");
+        File tempFile = new File(tempDeltacv, versionedName);
+
+        if(!tempDeltacv.exists()) {
+            tempDeltacv.mkdir();
+        }
+
+        if(!tempFile.exists()) {
+            try {
+                Files.copy(Objects.requireNonNull(AprilTagLibLoader.class.getResourceAsStream("/" + name)), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (NullPointerException e) {
+                throw new UnsupportedOperationException("Library could not be found for the " + osArch + " platform, AprilTag plugin is not supported. Tried " + name, e);
+            } catch (Exception e) {
+                throw new RuntimeException("Error while extracting library", e);
+            }
         }
 
         try {
