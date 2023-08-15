@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'com.github.deltacv'
-version '2.0.0-A'
+version '2.0.0-B'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

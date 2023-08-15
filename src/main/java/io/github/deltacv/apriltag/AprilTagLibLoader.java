@@ -70,7 +70,7 @@ public class AprilTagLibLoader {
         String osArch = osName + " (" + arch + ")";
 
         String name = prefix + "apriltag" + extension;
-        String versionedName = Integer.toUnsignedString(Build.versionString.hashCode()) +  name;
+        String versionedName = Integer.toUnsignedString(Build.versionString.hashCode()) + name;
 
         String tmpDir = System.getProperty("java.io.tmpdir");
 
