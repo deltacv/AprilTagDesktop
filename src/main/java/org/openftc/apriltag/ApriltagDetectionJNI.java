@@ -21,7 +21,8 @@
 
 package org.openftc.apriltag;
 
-import io.github.deltacv.apriltag.NativeLibLoader;
+import org.firstinspires.ftc.robotcore.external.matrices.GeneralMatrixF;
+import io.github.deltacv.apriltag.AprilTagLibLoader;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
@@ -126,9 +127,15 @@ public class ApriltagDetectionJNI
             detection.pose.x = pose[0];
             detection.pose.y = pose[1];
             detection.pose.z = pose[2];
-            detection.pose.yaw = pose[3];
-            detection.pose.pitch = pose[4];
-            detection.pose.roll = pose[5];
+
+            float[] rotMtxVals = new float[3*3];
+
+            for (int i = 0; i < 9; i++)
+            {
+                rotMtxVals[i] = (float) pose[3 + i];
+            }
+
+            detection.pose.R = new GeneralMatrixF(3, 3, rotMtxVals);
 
             detections.add(detection);
         }
@@ -138,6 +145,6 @@ public class ApriltagDetectionJNI
 
     static
     {
-        NativeLibLoader.load();
+        AprilTagLibLoader.load();
     }
 }

@@ -19,8 +19,6 @@
  * SOFTWARE.
  */
 
-#define _USE_MATH_DEFINES
-
 #include <jni.h>
 #include <apriltag.h>
 #include <tag36h11.h>
@@ -30,26 +28,22 @@
 #include <common/getopt.h>
 #include <apriltag_pose.h>
 #include <iostream>
-#include <math.h>
-#include <limits>
-#include <vector>
 
-bool closeEnough(const float& a, const float& b, const float& epsilon = std::numeric_limits<float>::epsilon());
-void rotationMatrixToEulerAngles_rad(matd_t* R, double *out);
+#include <cmath>
 
 extern "C" JNIEXPORT jint JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getId(JNIEnv *env, jclass clazz, jlong ptr)
 {
     apriltag_detection_t* detection = (apriltag_detection*) ptr;
-
+    
     if(detection == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return NULL;
     }
-
+    
     return detection->id;
 }
 
@@ -57,15 +51,15 @@ extern "C" JNIEXPORT jint JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getHamming(JNIEnv *env, jclass clazz, jlong ptr)
 {
     apriltag_detection_t* detection = (apriltag_detection*) ptr;
-
+    
     if(detection == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return NULL;
     }
-
+    
     return detection->hamming;
 }
 
@@ -73,15 +67,15 @@ extern "C" JNIEXPORT jfloat JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getDecisionMargin(JNIEnv *env, jclass clazz, jlong ptr)
 {
     apriltag_detection_t* detection = (apriltag_detection*) ptr;
-
+    
     if(detection == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return NULL;
     }
-
+    
     return detection->decision_margin;
 }
 
@@ -89,18 +83,18 @@ extern "C" JNIEXPORT jdoubleArray JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getCenterpoint(JNIEnv *env, jclass clazz, jlong ptr)
 {
     apriltag_detection_t* detection = (apriltag_detection*) ptr;
-
+    
     if(detection == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return NULL;
     }
-
+    
     jdoubleArray result = env->NewDoubleArray(2);
     env->SetDoubleArrayRegion(result, 0, 2, detection->c);
-
+    
     return result;
 }
 
@@ -108,26 +102,26 @@ extern "C" JNIEXPORT jdouble JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getSize(JNIEnv *env, jobject type, jlong ptr)
 {
     apriltag_detection_t* detection = (apriltag_detection*) ptr;
-
+    
     if(detection == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return 0;
     }
-
+    
     double* pointTopLeft = detection->p[0];
     double* pointBottomLeft = detection->p[1];
     double* pointBottomRight = detection->p[2];
     double* pointTopRight = detection->p[3];
-
+    
     int x = 0;
     int y = 1;
-
+    
     double dimA = hypot(pointTopLeft[x]-pointTopRight[x], pointTopLeft[y]-pointTopRight[y]);
     double dimB = hypot(pointTopLeft[x]-pointBottomLeft[x], pointTopLeft[y]-pointBottomLeft[y]);
-
+    
     return sqrt(dimA*dimB);
 }
 
@@ -135,32 +129,32 @@ extern "C" JNIEXPORT jobjectArray JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getCorners(JNIEnv *env, jclass clazz, jlong ptr)
 {
     apriltag_detection_t* detection = (apriltag_detection*) ptr;
-
+    
     if(detection == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return NULL;
     }
-
+    
     // Get the length for the first and second dimensions
     unsigned int lengthDim1 = 4; //4 corners
     unsigned int lengthDim2 = 2; //x,y
-
+    
     // Get the double array class
     jclass doubleArrayClass = env->FindClass("[D");
-
+    
     // Check if we properly got the double array class
     if (doubleArrayClass == NULL)
     {
         // Ooops
         return NULL;
     }
-
+    
     // Create the returnable 2D array
     jobjectArray java2dDoubleArray = env->NewObjectArray((jsize) lengthDim1, doubleArrayClass, NULL);
-
+    
     // Go through the first dimension and add the second dimension arrays
     for (int i = 0; i < lengthDim1; i++)
     {
@@ -169,25 +163,25 @@ Java_org_openftc_apriltag_ApriltagDetectionJNI_getCorners(JNIEnv *env, jclass cl
         env->SetObjectArrayElement(java2dDoubleArray, (jsize) i, doubleArray);
         env->DeleteLocalRef(doubleArray);
     }
-
+    
     // Return a Java consumable 2D double array
     return java2dDoubleArray;
 }
 
 extern "C" JNIEXPORT jdoubleArray JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getPoseEstimate(JNIEnv *env, jclass clazz, jlong ptr,
-                                                      jdouble tag_size, jdouble fx, jdouble fy, jdouble cx, jdouble cy)
+                                                               jdouble tag_size, jdouble fx, jdouble fy, jdouble cx, jdouble cy)
 {
     apriltag_detection_t* det = (apriltag_detection*) ptr;
-
+    
     if(det == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return NULL;
     }
-
+    
     apriltag_detection_info_t info;
     info.det = det;
     info.tagsize = tag_size;
@@ -195,122 +189,52 @@ Java_org_openftc_apriltag_ApriltagDetectionJNI_getPoseEstimate(JNIEnv *env, jcla
     info.fy = fy;
     info.cx = cx;
     info.cy = cy;
-
+    
     // Then call estimate_tag_pose.
     apriltag_pose_t pose;
     //double err = estimate_tag_pose(&info, &pose);
     estimate_tag_pose(&info, &pose);
-
-    double eulerAngles[3];
-
-    rotationMatrixToEulerAngles_rad(pose.R, eulerAngles);
-
-    jdoubleArray result = env->NewDoubleArray(6);
+    
+    jdoubleArray result = env->NewDoubleArray(3 + 3*3);
     //__android_log_print(ANDROID_LOG_DEBUG, "APRIL", "Pose: X=%.2f Y=%.2f Z=%.2f", pose.t->data[0], pose.t->data[1], pose.t->data[2]);
-    env->SetDoubleArrayRegion(result, 0, 3, pose.t->data);
-    env->SetDoubleArrayRegion(result, 3, 3, eulerAngles);
-
+    env->SetDoubleArrayRegion(result, 0, 3 /* 0->2  */, pose.t->data);
+    env->SetDoubleArrayRegion(result, 3, 9 /* 3->8  */, pose.R->data);
+    
     return result;
-}
-
-// Found online somewhere...
-void rotationMatrixToEulerAngles_rad(matd_t* R, double *out)
-{
-    //check for gimbal lock
-    if (closeEnough(MATD_EL(R, 0, 2), -1.0f))
-    {
-        float x = 0; //gimbal lock, value of x doesn't matter
-        float y = M_PI / 2;
-        float z = x + atan2(MATD_EL(R, 1, 0), MATD_EL(R, 2, 0));
-
-        out[0] = x;
-        out[1] = y;
-        out[2] = z;
-
-        return;
-    }
-    else if (closeEnough(MATD_EL(R, 0, 2), 1.0f))
-    {
-        float x = 0;
-        float y = -M_PI / 2;
-        float z = -x + atan2(-MATD_EL(R, 1, 0), -MATD_EL(R, 2, 0));
-
-        out[0] = x;
-        out[1] = y;
-        out[2] = z;
-
-        return;
-    }
-    else //two solutions exist
-    {
-        float x1 = -asin(MATD_EL(R, 0, 2));
-        float x2 = M_PI - x1;
-
-        float y1 = atan2(MATD_EL(R, 1, 2) / cos(x1), MATD_EL(R, 2, 2) / cos(x1));
-        float y2 = atan2(MATD_EL(R, 1, 2) / cos(x2), MATD_EL(R, 2, 2) / cos(x2));
-
-        float z1 = atan2(MATD_EL(R, 0, 1) / cos(x1), MATD_EL(R, 0, 0) / cos(x1));
-        float z2 = atan2(MATD_EL(R, 0, 1) / cos(x2), MATD_EL(R, 0, 0) / cos(x2));
-
-        //choose one solution to return
-        //for example the "shortest" rotation
-        if ((std::abs(x1) + std::abs(y1) + std::abs(z1)) <= (std::abs(x2) + std::abs(y2) + std::abs(z2)))
-        {
-            out[0] = x1;
-            out[1] = y1;
-            out[2] = z1;
-
-            return;
-        }
-        else
-        {
-            out[0] = x2;
-            out[1] = y2;
-            out[2] = z2;
-
-            return;
-        }
-    }
-}
-
-bool closeEnough(const float& a, const float& b, const float& epsilon)
-{
-    return (epsilon > std::abs(a - b));
 }
 
 extern "C" JNIEXPORT jlongArray JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_getDetectionPointers(JNIEnv *env, jclass clazz, jlong ptr)
 {
     zarray_t* detections = (zarray_t*) ptr;
-
+    
     if(detections == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return NULL;
     }
-
+    
     int numDetections = zarray_size(detections);
-
+    
     if(numDetections == 0)
     {
         return NULL;
     }
-
-    std::vector<jlong> detectionPointers(numDetections);
-
+    
+    jlong detectionPointers[numDetections];
+    
     for(int i = 0; i < numDetections; i++)
     {
         apriltag_detection_t* det;
         zarray_get(detections, i, &det);
         detectionPointers[i] = (jlong) det;
-		
     }
-
+    
     jlongArray result = env->NewLongArray(numDetections);
-    env->SetLongArrayRegion(result, 0, numDetections, detectionPointers.data());
-
+    env->SetLongArrayRegion(result, 0, numDetections, detectionPointers);
+    
     return result;
 }
 
@@ -319,15 +243,15 @@ JNIEXPORT void JNICALL
 Java_org_openftc_apriltag_ApriltagDetectionJNI_freeDetectionList(JNIEnv *env, jclass clazz, jlong jPtrDetections)
 {
     zarray_t* detections = (zarray_t*) jPtrDetections;
-
+    
     if(detections == NULL)
     {
         env->ThrowNew(
-                env->FindClass("java/lang/IllegalArgumentException"),
-                "Pointer must not be null!");
+                      env->FindClass("java/lang/IllegalArgumentException"),
+                      "Pointer must not be null!");
         return;
     }
-
+    
     // Destroys the array AND all the detections inside
     apriltag_detections_destroy(detections);
 }

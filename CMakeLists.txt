@@ -4,10 +4,27 @@
 # This ensures that a certain set of CMake features is available to
 # your build.
 
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 20)
 
 project("apriltag")
+
+if(NOT DEFINED ARCH)
+    if(DEFINED CMAKE_OSX_ARCHITECTURES AND NOT "${CMAKE_OSX_ARCHITECTURES}" STREQUAL "")
+	set(ARCH ${CMAKE_OSX_ARCHITECTURES})
+    else()
+    	set(ARCH ${CMAKE_SYSTEM_PROCESSOR})
+    endif()
+endif()
+
+string(TOLOWER ${ARCH} ARCH)
+
+
+if("${ARCH}" STREQUAL "x86_64")
+    set(ARCH "amd64")
+endif()
+
+message(STATUS "Target architecture: ${ARCH}")
 
 message(STATUS $ENV{JAVA_HOME})
 
@@ -16,10 +33,6 @@ set(JAVA_JVM_LIBRARY NotNeeded)
 set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 
 find_package(JNI REQUIRED)
-
-# option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
-
-set (CMAKE_CXX_STANDARD 11)
 
 add_library( # Specifies the name of the library.
              apriltag
@@ -30,40 +43,44 @@ add_library( # Specifies the name of the library.
              # Provides a relative path to your source file(s).
              src/main/cpp/AprilTagDetectorJNI.cpp
              src/main/cpp/AprilTagDetectionJNI.cpp
-             src/main/cpp/apriltag_common/src/g2d.c
-             src/main/cpp/apriltag_common/src/getopt.c
-             src/main/cpp/apriltag_common/src/homography.c
-             src/main/cpp/apriltag_common/src/image_u8.c
-             src/main/cpp/apriltag_common/src/image_u8x3.c
-             src/main/cpp/apriltag_common/src/image_u8x4.c
-             src/main/cpp/apriltag_common/src/matd.c
-             src/main/cpp/apriltag_common/src/pam.c
-             src/main/cpp/apriltag_common/src/pjpeg.c
-             src/main/cpp/apriltag_common/src/pjpeg-idct.c
-             src/main/cpp/apriltag_common/src/pnm.c
-             src/main/cpp/apriltag_common/src/string_util.c
-             src/main/cpp/apriltag_common/src/pthreads_cross.cpp
-             src/main/cpp/apriltag_common/src/svd22.c
-             src/main/cpp/apriltag_common/src/time_util.c
-             src/main/cpp/apriltag_common/src/unionfind.c
-             src/main/cpp/apriltag_common/src/workerpool.c
-             src/main/cpp/apriltag_common/src/zarray.c
-             src/main/cpp/apriltag_common/src/zhash.c
-             src/main/cpp/apriltag_common/src/zmaxheap.c
-             src/main/cpp/apriltag/src/apriltag.c
-             src/main/cpp/apriltag/src/apriltag_pose.c
-             src/main/cpp/apriltag/src/apriltag_quad_thresh.c
-             src/main/cpp/apriltag/src/tag16h5.c
-             src/main/cpp/apriltag/src/tag25h9.c
-             src/main/cpp/apriltag/src/tag36h11.c
-             src/main/cpp/apriltag/src/tagCircle21h7.c
-             src/main/cpp/apriltag/src/tagStandard41h12.c)
+
+             src/main/cpp/apriltag/common/g2d.c
+             src/main/cpp/apriltag/common/getopt.c
+             src/main/cpp/apriltag/common/homography.c
+             src/main/cpp/apriltag/common/image_u8.c
+             src/main/cpp/apriltag/common/image_u8x3.c
+             src/main/cpp/apriltag/common/image_u8x4.c
+             src/main/cpp/apriltag/common/matd.c
+             src/main/cpp/apriltag/common/pam.c
+             src/main/cpp/apriltag/common/pjpeg.c
+             src/main/cpp/apriltag/common/pjpeg-idct.c
+             src/main/cpp/apriltag/common/pnm.c
+             src/main/cpp/apriltag/common/string_util.c
+             src/main/cpp/apriltag/common/pthreads_cross.cpp
+             src/main/cpp/apriltag/common/svd22.c
+             src/main/cpp/apriltag/common/time_util.c
+             src/main/cpp/apriltag/common/unionfind.c
+             src/main/cpp/apriltag/common/workerpool.c
+             src/main/cpp/apriltag/common/zarray.c
+             src/main/cpp/apriltag/common/zhash.c
+             src/main/cpp/apriltag/common/zmaxheap.c
+             src/main/cpp/apriltag/apriltag.c
+             src/main/cpp/apriltag/apriltag_pose.c
+             src/main/cpp/apriltag/apriltag_quad_thresh.c
+             src/main/cpp/apriltag/tag16h5.c
+             src/main/cpp/apriltag/tag25h9.c
+             src/main/cpp/apriltag/tag36h11.c
+             src/main/cpp/apriltag/tagCircle21h7.c
+             src/main/cpp/apriltag/tagStandard41h12.c
+)
+
+set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
+
+# set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 			 
 # Specifies a path to native header files.
 include_directories(
-                     src/main/cpp/apriltag/include
-                     src/main/cpp/apriltag_common/include
-                     #${CMAKE_JAVA_}
+                     src/main/cpp/apriltag
+                     src/main/cpp/apriltag/common
 		     ${JNI_INCLUDE_DIRS}
 )
-		

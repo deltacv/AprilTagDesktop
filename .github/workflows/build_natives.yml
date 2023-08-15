@@ -1,0 +1,103 @@
+name: CMake
+on:
+  push:
+    branches:
+      - "**"
+env:
+  BUILD_TYPE: Release
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: "8"
+      - name: Configure CMake
+        run: cmake .
+      - name: Build
+        run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: native-linux-amd64
+          path: ${{github.workspace}}/*.so
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: "8"
+      - name: Configure CMake
+        run: cmake -T ClangCL .
+      - name: Build
+        run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: native-windows-amd64
+          path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*.dll
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: "8"
+      - name: Configure CMake
+        run: cmake .
+      - name: Build
+        run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: native-mac-amd64
+          path: ${{github.workspace}}/*.dylib
+  build-mac-cross-m1:
+    needs:
+      - build-linux
+      - build-windows
+      - build-mac
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: "8"
+      - name: Configure CMake
+        run: cmake -DCMAKE_OSX_ARCHITECTURES="arm64" .
+      - name: Build
+        run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      - uses: actions/download-artifact@v3
+        with:
+          name: native-windows-amd64
+          path: ${{github.workspace}}
+      - uses: actions/download-artifact@v3
+        with:
+          name: native-linux-amd64
+          path: ${{github.workspace}}
+      - uses: actions/download-artifact@v3
+        with:
+          name: native-mac-amd64
+          path: ${{github.workspace}}
+          
+      - uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: natives-${{github.ref}}
+          prerelease: true
+          title: Natives from ${{github.ref}}
+          files: |
+            ${{github.workspace}}/*.dll
+            ${{github.workspace}}/*.so
+            ${{github.workspace}}/*.dylib

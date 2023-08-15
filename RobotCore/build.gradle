@@ -1,24 +1,16 @@
 plugins {
-    id 'java-library'
+    id 'java'
     id 'maven-publish'
 }
 
-group 'com.github.deltacv'
-version '2.0.0-A'
+group 'org.firstinspires.ftc'
+version '8.2.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-sourceSets {
-    main {
-        resources {
-            // include native libs in the output jar
-            srcDirs "lib/"
-        }
-    }
-}
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
@@ -39,6 +31,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.openpnp:opencv:4.5.1-2"
-    api project(':RobotCore')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 }

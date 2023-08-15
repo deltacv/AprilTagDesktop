@@ -22,7 +22,7 @@
 package org.openftc.apriltag;
 
 import org.opencv.core.Mat;
-import io.github.deltacv.apriltag.NativeLibLoader;
+import io.github.deltacv.apriltag.AprilTagLibLoader;
 
 import java.util.ArrayList;
 
@@ -102,6 +102,6 @@ public class AprilTagDetectorJNI
 
     static
     {
-        NativeLibLoader.load();
+        AprilTagLibLoader.load();
     }
 }
