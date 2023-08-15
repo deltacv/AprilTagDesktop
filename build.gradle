@@ -14,7 +14,7 @@ java {
 sourceSets {
     main {
         resources {
-            // include native libs in the compiled jar
+            // include native libs in the output jar
             srcDirs "lib/"
         }
     }

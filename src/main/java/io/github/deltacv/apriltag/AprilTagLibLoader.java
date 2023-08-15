@@ -26,6 +26,7 @@ package io.github.deltacv.apriltag;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 public class AprilTagLibLoader {
 
@@ -54,7 +55,7 @@ public class AprilTagLibLoader {
         switch (OS) {
             case WINDOWS:
                 extension = arch + ".dll";
-                prefix = "";
+                prefix = ""; // windows dlls do not start by "lib"
                 break;
             case LINUX:
                 extension = arch + ".so";
@@ -66,15 +67,17 @@ public class AprilTagLibLoader {
                 throw new UnsupportedOperationException("The " + osName + " platform couldn't be recognized, therefore the april tag desktop plugin is not supported");
         }
 
+        String osArch = osName + " (" + arch + ")";
+
         String name = prefix + "apriltag" + extension;
 
         String tmpDir = System.getProperty("java.io.tmpdir");
-        File tempFile = new File(tmpDir + File.separator + name);
+        File tempFile = new File(tmpDir + File.separator + "deltacv_apriltag_" + Math.random() + File.separator + name);
 
         try {
-            Files.copy(AprilTagLibLoader.class.getResourceAsStream("/" + name), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(Objects.requireNonNull(AprilTagLibLoader.class.getResourceAsStream("/" + name)), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (NullPointerException e) {
-            throw new UnsupportedOperationException("Library could not be found for the " + osName + " platform, AprilTag plugin is not supported. Tried " + name, e);
+            throw new UnsupportedOperationException("Library could not be found for the " + osArch + " platform, AprilTag plugin is not supported. Tried " + name, e);
         } catch (Exception e) {
             throw new RuntimeException("Error while extracting library", e);
         }
@@ -82,7 +85,7 @@ public class AprilTagLibLoader {
         try {
             System.load(tempFile.getAbsolutePath());
         } catch (Throwable e) {
-            throw new UnsupportedOperationException("Library failed to link, AprilTag plugin is not supported in the " + osName + " platform", e);
+            throw new UnsupportedOperationException("Library failed to link, AprilTag plugin is not supported in the " + osArch + " platform", e);
         }
 
         hasBeenLoaded = true;
