@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "**"
+
 env:
   BUILD_TYPE: Release
 jobs:
