@@ -70,12 +70,12 @@ public class AprilTagLibLoader {
         String osArch = osName + " (" + arch + ")";
 
         String name = prefix + "apriltag" + extension;
-        String versionedName = Integer.toUnsignedString(Build.versionString.hashCode()) + name;
+        String version = Integer.toUnsignedString(Build.versionString.hashCode());
 
         String tmpDir = System.getProperty("java.io.tmpdir");
 
-        File tempDeltacv = new File(tmpDir + File.separator + "deltacv");
-        File tempFile = new File(tempDeltacv, versionedName);
+        File tempDeltacv = new File(tmpDir + File.separator + "deltacv" + File.separator + version);
+        File tempFile = new File(tempDeltacv, name);
 
         if(!tempDeltacv.exists()) {
             tempDeltacv.mkdir();
