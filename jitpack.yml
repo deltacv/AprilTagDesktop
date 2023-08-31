@@ -3,4 +3,4 @@ jdk:
 before_install:
  - chmod +x gradlew
 install:
- - ./gradlew clean build :publishToMavenLocal :RobotCore:publishToMavenLocal -x test
+ - ./gradlew clean build :publishToMavenLocal :RobotCore:publishToMavenLocal -x :example:build

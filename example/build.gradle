@@ -2,6 +2,12 @@ plugins {
     id 'java'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(10)
+    }
+}
+
 group 'com.github.deltacv'
 
 repositories {

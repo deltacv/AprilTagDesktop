@@ -7,10 +7,10 @@ group 'org.firstinspires.ftc'
 version '8.2.0'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(10)
+    }
 }
-
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
