@@ -24,7 +24,10 @@
 package io.github.deltacv.apriltag;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
@@ -74,16 +77,17 @@ public class AprilTagLibLoader {
 
         String tmpDir = System.getProperty("java.io.tmpdir");
 
-        File tempDeltacv = new File(tmpDir + File.separator + "deltacv" + File.separator + version);
-        File tempFile = new File(tempDeltacv, name);
+        Path tempDeltacv = Paths.get(tmpDir,  "deltacv", version);
+        Path tempFile = Paths.get(tempDeltacv.toString(), name);
 
-        if(!tempDeltacv.exists()) {
-            tempDeltacv.mkdir();
+        try {
+            Files.createDirectories(tempDeltacv);
+        } catch (IOException e) {
         }
 
-        if(!tempFile.exists()) {
+        if(!tempFile.toFile().exists()) {
             try {
-                Files.copy(Objects.requireNonNull(AprilTagLibLoader.class.getResourceAsStream("/" + name)), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(Objects.requireNonNull(AprilTagLibLoader.class.getResourceAsStream("/" + name)), tempFile, StandardCopyOption.REPLACE_EXISTING);
             } catch (NullPointerException e) {
                 throw new UnsupportedOperationException("Library could not be found for the " + osArch + " platform, AprilTag plugin is not supported. Tried " + name, e);
             } catch (Exception e) {
@@ -92,7 +96,7 @@ public class AprilTagLibLoader {
         }
 
         try {
-            System.load(tempFile.getAbsolutePath());
+            System.load(tempFile.toString());
         } catch (Throwable e) {
             throw new UnsupportedOperationException("Library failed to link, AprilTag plugin is not supported in the " + osArch + " platform", e);
         }
