@@ -11,8 +11,9 @@ group 'com.github.deltacv'
 version '2.0.0-B'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(10)
+    }
 }
 
 sourceSets {
@@ -43,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.openpnp:opencv:4.5.1-2"
+    compileOnly "org.openpnp:opencv:4.5.5-1"
     api project(':RobotCore')
 }
 

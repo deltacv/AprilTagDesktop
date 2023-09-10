@@ -2,6 +2,12 @@ plugins {
     id 'java'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(10)
+    }
+}
+
 group 'com.github.deltacv'
 
 repositories {
@@ -10,7 +16,7 @@ repositories {
 
 dependencies {
     implementation rootProject
-    implementation "org.openpnp:opencv:4.5.1-2"
+    implementation "org.openpnp:opencv:4.5.5-1"
 }
 
 task(runExample, dependsOn: 'classes', type: JavaExec) {

@@ -1,3 +1,16 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version "0.4.0"
+}
+
 rootProject.name = 'AprilTagDesktop'
+
 include 'RobotCore'
 include 'example'
