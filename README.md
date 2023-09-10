@@ -6,7 +6,8 @@ Port of EOCV-AprilTag-Plugin to the desktop EOCV-Sim
 # Supported platforms
 
   - Windows x86_64 (tested in Windows 10)
-  - MacOS x86_64 (not tested)
+  - MacOS x86_64
+  - MacOS AARCH64
   - Linux x86_64 (tested in Ubuntu 20.04)
   
 # Usage
