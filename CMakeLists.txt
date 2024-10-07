@@ -78,7 +78,7 @@ set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
 			 
 # Specifies a path to native header files.
 include_directories(
-                     src/main/cpp/apriltag
-                     src/main/cpp/apriltag/common
+                     apriltag
+                     apriltag/common
 		     ${JNI_INCLUDE_DIRS}
 )
