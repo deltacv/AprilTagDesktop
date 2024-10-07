@@ -44,35 +44,33 @@ add_library( # Specifies the name of the library.
              src/main/cpp/AprilTagDetectorJNI.cpp
              src/main/cpp/AprilTagDetectionJNI.cpp
 
-             src/main/cpp/apriltag/common/g2d.c
-             src/main/cpp/apriltag/common/getopt.c
-             src/main/cpp/apriltag/common/homography.c
-             src/main/cpp/apriltag/common/image_u8.c
-             src/main/cpp/apriltag/common/image_u8x3.c
-             src/main/cpp/apriltag/common/image_u8x4.c
-             src/main/cpp/apriltag/common/matd.c
-             src/main/cpp/apriltag/common/pam.c
-             src/main/cpp/apriltag/common/pjpeg.c
-             src/main/cpp/apriltag/common/pjpeg-idct.c
-             src/main/cpp/apriltag/common/pnm.c
-             src/main/cpp/apriltag/common/string_util.c
-             src/main/cpp/apriltag/common/pthreads_cross.cpp
-             src/main/cpp/apriltag/common/svd22.c
-             src/main/cpp/apriltag/common/time_util.c
-             src/main/cpp/apriltag/common/unionfind.c
-             src/main/cpp/apriltag/common/workerpool.c
-             src/main/cpp/apriltag/common/zarray.c
-             src/main/cpp/apriltag/common/zhash.c
-             src/main/cpp/apriltag/common/zmaxheap.c
-             src/main/cpp/apriltag/apriltag.c
-             src/main/cpp/apriltag/apriltag_pose.c
-             src/main/cpp/apriltag/apriltag_quad_thresh.c
-             src/main/cpp/apriltag/tag16h5.c
-             src/main/cpp/apriltag/tag25h9.c
-             src/main/cpp/apriltag/tag36h11.c
-             src/main/cpp/apriltag/tagCircle21h7.c
-             src/main/cpp/apriltag/tagStandard41h12.c
-)
+             apriltag/common/g2d.c
+             apriltag/common/getopt.c
+             apriltag/common/homography.c
+             apriltag/common/image_u8.c
+             apriltag/common/image_u8x3.c
+             apriltag/common/image_u8x4.c
+             apriltag/common/matd.c
+             apriltag/common/pam.c
+             apriltag/common/pjpeg.c
+             apriltag/common/pjpeg-idct.c
+             apriltag/common/pnm.c
+             apriltag/common/string_util.c
+             apriltag/common/svd22.c
+             apriltag/common/time_util.c
+             apriltag/common/unionfind.c
+             apriltag/common/workerpool.c
+             apriltag/common/zarray.c
+             apriltag/common/zhash.c
+             apriltag/common/zmaxheap.c
+             apriltag/apriltag.c
+             apriltag/apriltag_pose.c
+             apriltag/apriltag_quad_thresh.c
+             apriltag/tag16h5.c
+             apriltag/tag25h9.c
+             apriltag/tag36h11.c
+             apriltag/tagCircle21h7.c
+             apriltag/tagStandard41h12.c)
 
 set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
 

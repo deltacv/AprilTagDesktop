@@ -12,6 +12,7 @@ group 'com.github.deltacv'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {

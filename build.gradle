@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'com.github.deltacv'
-version '2.0.0-B'
+version '2.0.0-C'
 
 java {
     toolchain {
@@ -41,11 +41,12 @@ publishing {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    implementation 'com.github.deltacv.EOCV-Sim:Common:3.7.1'
     compileOnly "org.openpnp:opencv:4.5.5-1"
-    api project(':RobotCore')
 }
 
 task(writeBuildClassJava) {
