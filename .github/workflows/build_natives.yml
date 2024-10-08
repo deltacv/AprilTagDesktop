@@ -62,10 +62,6 @@ jobs:
           name: native-mac-amd64
           path: ${{github.workspace}}/*.dylib
   build-mac-arm:
-    needs:
-      - build-linux
-      - build-windows
-      - build-mac
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -79,6 +75,19 @@ jobs:
         run: cmake .
       - name: Build
         run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: native-mac-arm64
+          path: ${{github.workspace}}/*.dylib
+
+  upload-artifacts:
+    needs:
+      - build-linux
+      - build-windows
+      - build-mac
+      - build-mac-arm
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/download-artifact@v3
         with:
           name: native-windows-amd64
@@ -90,6 +99,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: native-mac-amd64
+          path: ${{github.workspace}}/artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: native-mac-arm64
           path: ${{github.workspace}}/artifacts
 
       - name: Zip Files
