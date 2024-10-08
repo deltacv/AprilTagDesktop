@@ -1,3 +1,6 @@
 [submodule "src/main/cpp/apriltag"]
 	path = apriltag
 	url = https://github.com/AprilRobotics/apriltag/
+[submodule "pthread-win32"]
+	path = pthread-win32
+	url = https://github.com/GerHobbelt/pthread-win32

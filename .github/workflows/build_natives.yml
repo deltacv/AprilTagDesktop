@@ -35,12 +35,10 @@ jobs:
         with:
           distribution: adopt
           java-version: "8"
-      - uses: cygwin/cygwin-install-action@master
       - name: Configure CMake
-        run: |
-          bash cd ${{github.workspace}} && cmake -T ClangCL .
+        run: cmake -T ClangCL .
       - name: Build
-        run: bash cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+        run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
       - uses: actions/upload-artifact@v3
         with:
           name: native-windows-amd64

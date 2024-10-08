@@ -34,6 +34,12 @@ set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 
 find_package(JNI REQUIRED)
 
+if (WIN32)
+    add_subdirectory(pthread-win32/)
+    target_link_libraries(apriltag pthread)
+    target_include_directories(apriltag PRIVATE pthread-win32/)
+endif()
+
 add_library( # Specifies the name of the library.
              apriltag
 
