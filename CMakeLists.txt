@@ -19,12 +19,13 @@ endif()
 
 string(TOLOWER ${ARCH} ARCH)
 
-if(WIN32)
-    add_subdirectory(pthread-win32/)
-endif()
-
 if("${ARCH}" STREQUAL "x86_64")
     set(ARCH "amd64")
+endif()
+
+if(WIN32)
+    # Add the pthread-win32 subdirectory
+    add_subdirectory(pthread-win32)
 endif()
 
 message(STATUS "Target architecture: ${ARCH}")
@@ -77,12 +78,14 @@ add_library( # Specifies the name of the library.
 
 set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
 
-if(WIN32)
-    target_include_directories(apriltag PUBLIC pthread-win32)
-endif()
-
 include_directories(
     apriltag
     apriltag/common
     ${JNI_INCLUDE_DIRS}
 )
+
+# If on Windows, link pthread to apriltag
+if(WIN32)
+  # Choose one of the pthread-win32 libraries depending on your use case:
+  target_link_libraries(apriltag pthreadVC3)  # Or pthreadVSE3 or pthreadVCE3 depending on your build
+endif()
