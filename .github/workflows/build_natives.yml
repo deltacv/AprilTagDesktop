@@ -34,7 +34,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: adopt
-          java-version: "8"
+          java-version: "11"
       - name: Configure CMake
         run: cmake -T ClangCL .
       - name: Build
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: adopt
-          java-version: "8"
+          java-version: "11"
       - name: Configure CMake
         run: cmake .
       - name: Build
@@ -66,7 +66,7 @@ jobs:
       - build-linux
       - build-windows
       - build-mac
-    runs-on: macos-11
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -74,7 +74,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: adopt
-          java-version: "8"
+          java-version: "11"
       - name: Configure CMake
         run: cmake -DCMAKE_OSX_ARCHITECTURES="arm64" .
       - name: Build
