@@ -82,24 +82,20 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: native-windows-amd64
-          path: ${{github.workspace}}
+          path: ${{github.workspace}}/artifacts
       - uses: actions/download-artifact@v3
         with:
           name: native-linux-amd64
-          path: ${{github.workspace}}
+          path: ${{github.workspace}}/artifacts
       - uses: actions/download-artifact@v3
         with:
           name: native-mac-amd64
-          path: ${{github.workspace}}
+          path: ${{github.workspace}}/artifacts
 
-
-      - uses: vimtor/action-zip@v1.2
-        with:
-          files: |
-            ${{github.workspace}}/*.so
-            ${{github.workspace}}/*.dll
-            ${{github.workspace}}/*.dylib
-          dest: apriltagdesktop-natives.zip
+      - name: Zip Files
+        run: |
+          cd ${{github.workspace}}/artifacts
+          zip -r apriltagdesktop-natives.zip .
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
@@ -108,7 +104,7 @@ jobs:
           prerelease: true
           title: Natives from ${{github.ref}}
           files: |
-            ${{github.workspace}}/*.dll
-            ${{github.workspace}}/*.so
-            ${{github.workspace}}/*.dylib
+            ${{github.workspace}}/artifacts/*.dll
+            ${{github.workspace}}/artifacts/*.so
+            ${{github.workspace}}/artifacts/*.dylib
             apriltagdesktop-natives.zip
