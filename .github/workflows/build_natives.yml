@@ -44,7 +44,7 @@ jobs:
           name: native-windows-amd64
           path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*.dll
   build-mac:
-    runs-on: macos-11
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
         with:
