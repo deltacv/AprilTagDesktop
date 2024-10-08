@@ -5,7 +5,7 @@
 # your build.
 
 cmake_minimum_required(VERSION 3.5)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 11)
 
 project("apriltag")
 
@@ -21,11 +21,6 @@ string(TOLOWER ${ARCH} ARCH)
 
 if("${ARCH}" STREQUAL "x86_64")
     set(ARCH "amd64")
-endif()
-
-if(WIN32)
-    # Add the pthread-win32 subdirectory
-    add_subdirectory(pthread-win32)
 endif()
 
 message(STATUS "Target architecture: ${ARCH}")
@@ -63,6 +58,7 @@ add_library( # Specifies the name of the library.
              apriltag/common/svd22.c
              apriltag/common/time_util.c
              apriltag/common/unionfind.c
+             apriltag/common/pthreads_cross.c # EOCV-AprilTag-Plugin does not add this, but it is needed for windows...
              apriltag/common/workerpool.c
              apriltag/common/zarray.c
              apriltag/common/zhash.c
@@ -76,6 +72,13 @@ add_library( # Specifies the name of the library.
              apriltag/tagCircle21h7.c
              apriltag/tagStandard41h12.c)
 
+
+# VROOOOOOOM
+target_compile_options(apriltag PRIVATE
+        "$<$<CONFIG:RELEASE>:-O3>"
+        "$<$<CONFIG:DEBUG>:-O3>"
+        )
+
 set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
 
 include_directories(
@@ -83,9 +86,3 @@ include_directories(
     apriltag/common
     ${JNI_INCLUDE_DIRS}
 )
-
-# If on Windows, link pthread to apriltag
-if(WIN32)
-  # Choose one of the pthread-win32 libraries depending on your use case:
-  target_link_libraries(apriltag pthreadVC3)  # Or pthreadVSE3 or pthreadVCE3 depending on your build
-endif()

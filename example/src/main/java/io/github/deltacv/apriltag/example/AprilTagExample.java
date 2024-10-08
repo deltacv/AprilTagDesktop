@@ -31,9 +31,11 @@ public class AprilTagExample {
     // UNITS ARE METERS
     public static double TAG_SIZE = 0.166;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         long detector = AprilTagDetectorJNI.createApriltagDetector(AprilTagDetectorJNI.TagFamily.TAG_36h11.string, 3, 3);
         System.out.println("Created apriltag detector " + detector);
+
+        AprilTagDetectorJNI.setApriltagDetectorDecimation(detector, 4);
 
         VideoCapture camera = new VideoCapture();
 
@@ -63,6 +65,13 @@ public class AprilTagExample {
 
             for(AprilTagDetection detection : detections) {
                 System.out.printf("detected apriltag %d at x=%.2f y=%.2f z=%.2f\n", detection.id, detection.pose.x, detection.pose.y, detection.pose.z);
+            }
+
+            Thread.sleep(1000);
+
+            if(true) {
+                AprilTagDetectorJNI.releaseApriltagDetector(detector);
+                return;
             }
         }
 

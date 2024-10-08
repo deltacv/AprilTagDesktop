@@ -73,7 +73,8 @@ public class AprilTagLibLoader {
         String osArch = osName + " (" + arch + ")";
 
         String name = prefix + "apriltag" + extension;
-        String version = Integer.toUnsignedString(Build.versionString.hashCode());
+        // generate a unique version string based on the build date and version, for the temp folder name
+        String version = Integer.toUnsignedString((Build.versionString + Build.buildDate).hashCode());
 
         String tmpDir = System.getProperty("java.io.tmpdir");
 
