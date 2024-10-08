@@ -19,6 +19,9 @@ endif()
 
 string(TOLOWER ${ARCH} ARCH)
 
+if(WIN32)
+    add_subdirectory(pthread-win32/)
+endif()
 
 if("${ARCH}" STREQUAL "x86_64")
     set(ARCH "amd64")
@@ -74,23 +77,12 @@ add_library( # Specifies the name of the library.
 
 set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
 
-# set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
-
-
-if (WIN32)
-    add_subdirectory(pthread-win32/)
-    # Specifies a path to native header files.
-    include_directories(
-                     apriltag
-                     apriltag/common
-		     ${JNI_INCLUDE_DIRS}
-		     pthread-win32/
-    )
-else()
-    # Specifies a path to native header files.
-    include_directories(
-                     apriltag
-                     apriltag/common
-		     ${JNI_INCLUDE_DIRS}
-    )
+if(WIN32)
+    target_include_directories(apriltag PUBLIC pthread-win32)
 endif()
+
+include_directories(
+    apriltag
+    apriltag/common
+    ${JNI_INCLUDE_DIRS}
+)
