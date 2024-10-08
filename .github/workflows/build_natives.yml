@@ -94,7 +94,8 @@ jobs:
 
       - name: Zip Files
         run: |
-          zip -r apriltagdesktop-natives.zip ${{github.workspace}}/artifacts
+          cd ${{github.workspace}}/artifacts
+          zip -r apriltagdesktop-natives.zip .
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
@@ -103,7 +104,4 @@ jobs:
           prerelease: true
           title: Natives from ${{github.ref}}
           files: |
-            ${{github.workspace}}/artifacts/*.dll
-            ${{github.workspace}}/artifacts/*.so
-            ${{github.workspace}}/artifacts/*.dylib
-            apriltagdesktop-natives.zip
+            ${{github.workspace}}/artifacts/*
