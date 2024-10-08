@@ -94,8 +94,7 @@ jobs:
 
       - name: Zip Files
         run: |
-          cd ${{github.workspace}}/artifacts
-          zip -r apriltagdesktop-natives.zip .
+          zip -r apriltagdesktop-natives.zip ${{github.workspace}}/artifacts
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
