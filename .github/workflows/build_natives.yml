@@ -44,7 +44,7 @@ jobs:
           name: native-windows-amd64
           path: ${{github.workspace}}\${{env.BUILD_TYPE}}\*.dll
   build-mac:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
         with:
@@ -61,7 +61,7 @@ jobs:
         with:
           name: native-mac-amd64
           path: ${{github.workspace}}/*.dylib
-  build-mac-cross-m1:
+  build-mac-arm:
     needs:
       - build-linux
       - build-windows
@@ -76,7 +76,7 @@ jobs:
           distribution: adopt
           java-version: "11"
       - name: Configure CMake
-        run: cmake -DCMAKE_OSX_ARCHITECTURES="arm64" .
+        run: cmake .
       - name: Build
         run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
       - uses: actions/download-artifact@v3
