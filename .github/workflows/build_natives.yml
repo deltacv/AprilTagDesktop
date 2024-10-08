@@ -91,7 +91,16 @@ jobs:
         with:
           name: native-mac-amd64
           path: ${{github.workspace}}
-          
+
+
+      - uses: vimtor/action-zip@v1.2
+        with:
+          files: |
+            ${{github.workspace}}/*.so
+            ${{github.workspace}}/*.dll
+            ${{github.workspace}}/*.dylib
+          dest: apriltagdesktop-natives.zip
+
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -102,3 +111,4 @@ jobs:
             ${{github.workspace}}/*.dll
             ${{github.workspace}}/*.so
             ${{github.workspace}}/*.dylib
+            apriltagdesktop-natives.zip
