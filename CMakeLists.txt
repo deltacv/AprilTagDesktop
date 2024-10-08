@@ -34,12 +34,6 @@ set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 
 find_package(JNI REQUIRED)
 
-if (WIN32)
-    add_subdirectory(pthread-win32/)
-    target_link_libraries(apriltag pthread)
-    target_include_directories(apriltag PRIVATE pthread-win32/)
-endif()
-
 add_library( # Specifies the name of the library.
              apriltag
 
@@ -81,10 +75,22 @@ add_library( # Specifies the name of the library.
 set_target_properties(apriltag PROPERTIES OUTPUT_NAME "apriltag_${ARCH}")
 
 # set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
-			 
-# Specifies a path to native header files.
-include_directories(
+
+
+if (WIN32)
+    add_subdirectory(pthread-win32/)
+    # Specifies a path to native header files.
+    include_directories(
                      apriltag
                      apriltag/common
 		     ${JNI_INCLUDE_DIRS}
-)
+		     pthread-win32/
+    )
+else()
+    # Specifies a path to native header files.
+    include_directories(
+                     apriltag
+                     apriltag/common
+		     ${JNI_INCLUDE_DIRS}
+    )
+endif()
