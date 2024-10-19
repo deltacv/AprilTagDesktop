@@ -25,6 +25,39 @@ jobs:
         with:
           name: native-linux-amd64
           path: ${{github.workspace}}/*.so
+  build-linux-arm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: "8"
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake gcc g++ gfortran
+
+      - name: Install cross-compilation tools for ARM
+        run: sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+
+      - name: Configure CMake for cross-compilation
+        run: |
+          cmake \
+            -DCMAKE_SYSTEM_NAME=Linux \
+            -DCMAKE_SYSTEM_PROCESSOR=armhf \
+            -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc \
+            -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ .
+
+      - name: Build
+        run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: native-linux-arm64
+          path: ${{github.workspace}}/*.so
   build-windows:
     runs-on: windows-latest
     steps:
@@ -95,6 +128,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: native-linux-amd64
+          path: ${{github.workspace}}/artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: native-linux-arm64
           path: ${{github.workspace}}/artifacts
       - uses: actions/download-artifact@v3
         with:
