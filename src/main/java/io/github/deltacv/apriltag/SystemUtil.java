@@ -30,7 +30,10 @@ class SystemUtil {
     }
 
     public enum Architecture {
-        AMD64("amd64"), ARM64("arm64"), UNKNOWN("");
+        AMD64("amd64"),
+        ARM64("arm64"),
+        AAARCH64("aarch64"), // uh, same thing as ARM64, but linux uses this
+        UNKNOWN("");
 
         public final String suffix;
 
@@ -59,7 +62,11 @@ class SystemUtil {
         String arch = System.getProperty("os.arch").toLowerCase();
 
         if(arch.equals("aarch64") || arch.contains("arch") || arch.contains("arm")) {
-            return Architecture.ARM64;
+            if(SystemUtil.getOS() == OperatingSystem.LINUX) {
+                return Architecture.AAARCH64;
+            } else {
+                return Architecture.ARM64;
+            }
         } else if(arch.equals("amd64") || arch.contains("64") || arch.contains("x86_64")) {
             return Architecture.AMD64;
         } else {
