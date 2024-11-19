@@ -4,7 +4,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(10)
+        languageVersion = JavaLanguageVersion.of(11)
     }
 }
 
@@ -12,7 +12,6 @@ group 'com.github.deltacv'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 }
 
 dependencies {

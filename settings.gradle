@@ -12,5 +12,4 @@ plugins {
 
 rootProject.name = 'AprilTagDesktop'
 
-include 'RobotCore'
 include 'example'
