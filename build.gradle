@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'org.deltacv'
-version '2.1.0-C'
+version '2.1.0-D'
 
 java {
     toolchain {
